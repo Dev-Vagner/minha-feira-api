@@ -1,57 +1,57 @@
-DROP TABLE IF EXISTS usuario CASCADE;
-DROP TABLE IF EXISTS categoria CASCADE;
-DROP TABLE IF EXISTS produto CASCADE;
-DROP TABLE IF EXISTS feira CASCADE;
-DROP TABLE IF EXISTS produto_quantidade CASCADE;
+DROP TABLE IF EXISTS tb_user CASCADE;
+DROP TABLE IF EXISTS tb_category CASCADE;
+DROP TABLE IF EXISTS tb_product CASCADE;
+DROP TABLE IF EXISTS tb_market CASCADE;
+DROP TABLE IF EXISTS tb_product_quantity CASCADE;
 
-CREATE TABLE usuario(
+CREATE TABLE tb_user(
 	id BIGINT GENERATED ALWAYS AS IDENTITY NOT NULL,
-	nome VARCHAR(50) NOT NULL,
+	name VARCHAR(50) NOT NULL,
 	email VARCHAR(50) NOT NULL,
-	senha VARCHAR(50) NOT NULL,
-	CONSTRAINT pk_usuario_id PRIMARY KEY (id),
-	CONSTRAINT uk_usuario_email UNIQUE (email)
+	password VARCHAR(50) NOT NULL,
+	CONSTRAINT pk_user_id PRIMARY KEY (id),
+	CONSTRAINT uk_user_email UNIQUE (email)
 );
 
-CREATE TABLE categoria(
+CREATE TABLE tb_category(
 	id BIGINT GENERATED ALWAYS AS IDENTITY NOT NULL,
-	nome VARCHAR(50) NOT NULL,
-	usuario_id BIGINT NOT NULL,
-	CONSTRAINT pk_categoria_id PRIMARY KEY (id),
-	CONSTRAINT uk_categoria_nome_usuario UNIQUE (nome, usuario_id),
-	CONSTRAINT fk_categoria_usuario FOREIGN KEY (usuario_id) REFERENCES usuario ON DELETE CASCADE
+	name VARCHAR(50) NOT NULL,
+	user_id BIGINT NOT NULL,
+	CONSTRAINT pk_category_id PRIMARY KEY (id),
+	CONSTRAINT uk_category_name_user UNIQUE (name, user_id),
+	CONSTRAINT fk_category_user FOREIGN KEY (user_id) REFERENCES tb_user ON DELETE CASCADE
 );
 
-CREATE TABLE produto(
+CREATE TABLE tb_product(
 	id BIGINT GENERATED ALWAYS AS IDENTITY NOT NULL,
-	nome VARCHAR(50) NOT NULL,
-	categoria_id BIGINT,
-	usuario_id BIGINT NOT NULL,
-	ativo BOOLEAN NOT NULL,
-	CONSTRAINT pk_produto_id PRIMARY KEY (id),
-	CONSTRAINT fk_produto_categoria FOREIGN KEY (categoria_id) REFERENCES categoria ON DELETE SET NULL,
-	CONSTRAINT fk_produto_usuario FOREIGN KEY (usuario_id) REFERENCES usuario ON DELETE CASCADE
+	name VARCHAR(50) NOT NULL,
+	category_id BIGINT,
+	user_id BIGINT NOT NULL,
+	active BOOLEAN NOT NULL,
+	CONSTRAINT pk_product_id PRIMARY KEY (id),
+	CONSTRAINT fk_product_category FOREIGN KEY (category_id) REFERENCES tb_category ON DELETE SET NULL,
+	CONSTRAINT fk_product_user FOREIGN KEY (user_id) REFERENCES tb_user ON DELETE CASCADE
 );
 
-CREATE TABLE feira (
+CREATE TABLE tb_market(
 	id BIGINT GENERATED ALWAYS AS IDENTITY NOT NULL,
-	data_feira DATE NOT NULL,
-	valor_total NUMERIC(12, 2),
-	usuario_id BIGINT NOT NULL,
-	CONSTRAINT pk_feira_id PRIMARY KEY (id),
-	CONSTRAINT fk_feira_usuario FOREIGN KEY (usuario_id) REFERENCES usuario ON DELETE CASCADE
+	date_market DATE NOT NULL,
+	total_value NUMERIC(12, 2),
+	user_id BIGINT NOT NULL,
+	CONSTRAINT pk_market_id PRIMARY KEY (id),
+	CONSTRAINT fk_market_user FOREIGN KEY (user_id) REFERENCES tb_user ON DELETE CASCADE
 );
 
-CREATE TABLE produto_quantidade (
+CREATE TABLE tb_product_quantity (
 	id BIGINT GENERATED ALWAYS AS IDENTITY NOT NULL,
-	produto_id BIGINT NOT NULL,
-	quantidade INT NOT NULL,
-	valor_unidade NUMERIC(12, 2),
-	feira_id BIGINT NOT NULL,
-	CONSTRAINT pk_produto_quantidade_id PRIMARY KEY (id),
-	CONSTRAINT uk_produto_feira UNIQUE (produto_id, feira_id),
-	CONSTRAINT fk_produto_quantidade_produto FOREIGN KEY (produto_id) REFERENCES produto,
-	CONSTRAINT fk_produto_quantidade_feira FOREIGN KEY (feira_id) REFERENCES feira ON DELETE CASCADE
+	product_id BIGINT NOT NULL,
+	quantity INT NOT NULL,
+	unit_value NUMERIC(12, 2),
+	market_id BIGINT NOT NULL,
+	CONSTRAINT pk_product_quantity_id PRIMARY KEY (id),
+	CONSTRAINT uk_product_market UNIQUE (product_id, market_id),
+	CONSTRAINT fk_product_quantity_product FOREIGN KEY (product_id) REFERENCES tb_product,
+	CONSTRAINT fk_product_quantity_market FOREIGN KEY (market_id) REFERENCES tb_market ON DELETE CASCADE
 );
 
 
