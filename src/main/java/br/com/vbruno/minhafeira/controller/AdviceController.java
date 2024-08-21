@@ -1,6 +1,7 @@
 package br.com.vbruno.minhafeira.controller;
 
 import br.com.vbruno.minhafeira.DTO.response.ErrorResponse;
+import br.com.vbruno.minhafeira.exception.EmailRegisteredException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,11 +14,25 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.*;
 
 @ControllerAdvice
 public class AdviceController {
+
+    @ExceptionHandler(EmailRegisteredException.class)
+    public ResponseEntity<ErrorResponse> handleEmailRegisteredException(EmailRegisteredException ex, HttpServletRequest request) {
+
+        HttpStatus status = UNPROCESSABLE_ENTITY;
+
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setTimeStamp(LocalDateTime.now());
+        errorResponse.setStatus(status.value());
+        errorResponse.setReasonPhrase(status.getReasonPhrase());
+        errorResponse.setMessage(ex.getMessage());
+        errorResponse.setPath(request.getServletPath());
+
+        return new ResponseEntity<>(errorResponse, status);
+    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex,
