@@ -1,4 +1,4 @@
-package br.com.vbruno.minhafeira.service.user;
+package br.com.vbruno.minhafeira.service.user.validate;
 
 import br.com.vbruno.minhafeira.exception.EmailRegisteredException;
 import br.com.vbruno.minhafeira.repository.UserRepository;

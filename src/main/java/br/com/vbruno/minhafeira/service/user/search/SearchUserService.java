@@ -1,4 +1,4 @@
-package br.com.vbruno.minhafeira.service.user;
+package br.com.vbruno.minhafeira.service.user.search;
 
 import br.com.vbruno.minhafeira.domain.User;
 import br.com.vbruno.minhafeira.exception.UserNotRegisteredException;
