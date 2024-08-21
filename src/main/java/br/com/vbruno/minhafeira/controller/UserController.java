@@ -2,8 +2,10 @@ package br.com.vbruno.minhafeira.controller;
 
 import br.com.vbruno.minhafeira.DTO.request.CreateUserRequest;
 import br.com.vbruno.minhafeira.DTO.request.UpdateUserRequest;
+import br.com.vbruno.minhafeira.DTO.response.DetailsUserResponse;
 import br.com.vbruno.minhafeira.DTO.response.IdResponse;
 import br.com.vbruno.minhafeira.service.user.CreateUserService;
+import br.com.vbruno.minhafeira.service.user.DetailsUserService;
 import br.com.vbruno.minhafeira.service.user.UpdateUserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +17,18 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     @Autowired
+    private DetailsUserService detailsUserService;
+
+    @Autowired
     private CreateUserService createUserService;
 
     @Autowired
     private UpdateUserService updateUserService;
+
+    @GetMapping("/{id}")
+    public DetailsUserResponse details(@PathVariable Long id) {
+        return detailsUserService.details(id);
+    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
