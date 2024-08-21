@@ -2,6 +2,7 @@ package br.com.vbruno.minhafeira.controller;
 
 import br.com.vbruno.minhafeira.DTO.response.ErrorResponse;
 import br.com.vbruno.minhafeira.exception.EmailRegisteredException;
+import br.com.vbruno.minhafeira.exception.UserNotRegisteredException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,21 @@ import static org.springframework.http.HttpStatus.*;
 
 @ControllerAdvice
 public class AdviceController {
+
+    @ExceptionHandler(UserNotRegisteredException.class)
+    public ResponseEntity<ErrorResponse> handleUserNotRegisteredException(UserNotRegisteredException ex, HttpServletRequest request) {
+
+        HttpStatus status = UNPROCESSABLE_ENTITY;
+
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setTimeStamp(LocalDateTime.now());
+        errorResponse.setStatus(status.value());
+        errorResponse.setReasonPhrase(status.getReasonPhrase());
+        errorResponse.setMessage(ex.getMessage());
+        errorResponse.setPath(request.getServletPath());
+
+        return new ResponseEntity<>(errorResponse, status);
+    }
 
     @ExceptionHandler(EmailRegisteredException.class)
     public ResponseEntity<ErrorResponse> handleEmailRegisteredException(EmailRegisteredException ex, HttpServletRequest request) {
