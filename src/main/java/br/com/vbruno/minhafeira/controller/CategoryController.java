@@ -4,18 +4,21 @@ import br.com.vbruno.minhafeira.DTO.request.category.CreateCategoryRequest;
 import br.com.vbruno.minhafeira.DTO.request.category.UpdateCategoryRequest;
 import br.com.vbruno.minhafeira.DTO.response.IdResponse;
 import br.com.vbruno.minhafeira.DTO.response.category.DetailsCategoryResponse;
-import br.com.vbruno.minhafeira.service.category.CreateCategoryService;
-import br.com.vbruno.minhafeira.service.category.DeleteCategoryService;
-import br.com.vbruno.minhafeira.service.category.DetailsCategoryService;
-import br.com.vbruno.minhafeira.service.category.UpdateCategoryService;
+import br.com.vbruno.minhafeira.DTO.response.category.ListCategoryResponse;
+import br.com.vbruno.minhafeira.service.category.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/categories")
 public class CategoryController {
+
+    @Autowired
+    private ListCategoryService listCategoryService;
 
     @Autowired
     private DetailsCategoryService detailsCategoryService;
@@ -28,6 +31,11 @@ public class CategoryController {
 
     @Autowired
     private DeleteCategoryService deleteCategoryService;
+
+    @GetMapping("/user/{idUser}")
+    public List<ListCategoryResponse> list(@PathVariable Long idUser) {
+        return listCategoryService.list(idUser);
+    }
 
     @GetMapping("/{idCategory}/user/{idUser}")
     public DetailsCategoryResponse details(@PathVariable Long idCategory, @PathVariable Long idUser) {
