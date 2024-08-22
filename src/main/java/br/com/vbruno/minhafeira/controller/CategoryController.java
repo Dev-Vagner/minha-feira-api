@@ -3,7 +3,9 @@ package br.com.vbruno.minhafeira.controller;
 import br.com.vbruno.minhafeira.DTO.request.category.CreateCategoryRequest;
 import br.com.vbruno.minhafeira.DTO.request.category.UpdateCategoryRequest;
 import br.com.vbruno.minhafeira.DTO.response.IdResponse;
+import br.com.vbruno.minhafeira.DTO.response.category.DetailsCategoryResponse;
 import br.com.vbruno.minhafeira.service.category.CreateCategoryService;
+import br.com.vbruno.minhafeira.service.category.DetailsCategoryService;
 import br.com.vbruno.minhafeira.service.category.UpdateCategoryService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +17,18 @@ import org.springframework.web.bind.annotation.*;
 public class CategoryController {
 
     @Autowired
+    private DetailsCategoryService detailsCategoryService;
+
+    @Autowired
     private CreateCategoryService createCategoryService;
 
     @Autowired
     private UpdateCategoryService updateCategoryService;
+
+    @GetMapping("/{idCategory}/user/{idUser}")
+    public DetailsCategoryResponse details(@PathVariable Long idCategory, @PathVariable Long idUser) {
+        return detailsCategoryService.details(idCategory, idUser);
+    }
 
     @PostMapping("/user/{idUser}")
     @ResponseStatus(HttpStatus.CREATED)
@@ -31,4 +41,6 @@ public class CategoryController {
     public IdResponse update(@PathVariable Long idCategory, @PathVariable Long idUser, @Valid @RequestBody UpdateCategoryRequest request) {
         return updateCategoryService.update(idCategory, idUser, request);
     }
+
+
 }
