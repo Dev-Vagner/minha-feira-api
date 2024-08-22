@@ -55,7 +55,7 @@ class UpdateUserServiceTest {
     }
 
     @Test
-    @DisplayName("Deve retornar erro quando ID for inválido")
+    @DisplayName("Deve retornar erro quando tentar editar usuário mas o ID enviado for inválido")
     void deveRetornarErroQuandoIdInvalido() {
         Long id = 1L;
         UpdateUserRequest updateUserRequest = UserFactory.getUpdateUserRequest();
