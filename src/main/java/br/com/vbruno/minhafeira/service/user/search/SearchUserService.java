@@ -13,9 +13,8 @@ public class SearchUserService {
     private UserRepository userRepository;
 
     public User byId(Long id) {
-
         return userRepository.findById(id)
-                .orElseThrow(() -> new UserNotRegisteredException("Usuário não cadastrado!"));
+                .orElseThrow(() -> new UserNotRegisteredException("Usuário não cadastrado"));
     }
 
 }

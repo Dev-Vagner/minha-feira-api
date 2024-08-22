@@ -14,6 +14,6 @@ public class ValidateUniqueEmailUserService {
     public void validate(String email) {
         boolean existsEmail = userRepository.existsByEmail(email);
 
-        if(existsEmail) throw new EmailRegisteredException("Este email já está cadastrado!");
+        if(existsEmail) throw new EmailRegisteredException("Este email já está cadastrado");
     }
 }

@@ -14,6 +14,6 @@ public class ValidateUniqueCategoryFromUserService {
     public void validate(String nameCategory, Long idUser) {
         boolean existsCategory = categoryRepository.existsByNameIgnoreCaseAndUserId(nameCategory, idUser);
 
-        if(existsCategory) throw new CategoryRegisteredException("Esta categoria já está cadastrada!");
+        if(existsCategory) throw new CategoryRegisteredException("Esta categoria já está cadastrada");
     }
 }
