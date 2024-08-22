@@ -1,6 +1,6 @@
 package br.com.vbruno.minhafeira.service.user;
 
-import br.com.vbruno.minhafeira.DTO.request.CreateUserRequest;
+import br.com.vbruno.minhafeira.DTO.request.user.CreateUserRequest;
 import br.com.vbruno.minhafeira.DTO.response.IdResponse;
 import br.com.vbruno.minhafeira.domain.User;
 import br.com.vbruno.minhafeira.mapper.IdResponseMapper;

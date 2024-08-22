@@ -1,6 +1,6 @@
 package br.com.vbruno.minhafeira.mapper.user;
 
-import br.com.vbruno.minhafeira.DTO.response.DetailsUserResponse;
+import br.com.vbruno.minhafeira.DTO.response.user.DetailsUserResponse;
 import br.com.vbruno.minhafeira.domain.User;
 import br.com.vbruno.minhafeira.factory.UserFactory;
 import org.junit.jupiter.api.Assertions;

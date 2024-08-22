@@ -1,8 +1,8 @@
 package br.com.vbruno.minhafeira.controller;
 
-import br.com.vbruno.minhafeira.DTO.request.CreateUserRequest;
-import br.com.vbruno.minhafeira.DTO.request.UpdateUserRequest;
-import br.com.vbruno.minhafeira.DTO.response.DetailsUserResponse;
+import br.com.vbruno.minhafeira.DTO.request.user.CreateUserRequest;
+import br.com.vbruno.minhafeira.DTO.request.user.UpdateUserRequest;
+import br.com.vbruno.minhafeira.DTO.response.user.DetailsUserResponse;
 import br.com.vbruno.minhafeira.DTO.response.IdResponse;
 import br.com.vbruno.minhafeira.service.user.CreateUserService;
 import br.com.vbruno.minhafeira.service.user.DeleteUserService;

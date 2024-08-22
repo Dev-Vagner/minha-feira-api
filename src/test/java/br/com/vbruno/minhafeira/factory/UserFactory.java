@@ -1,7 +1,7 @@
 package br.com.vbruno.minhafeira.factory;
 
-import br.com.vbruno.minhafeira.DTO.request.CreateUserRequest;
-import br.com.vbruno.minhafeira.DTO.request.UpdateUserRequest;
+import br.com.vbruno.minhafeira.DTO.request.user.CreateUserRequest;
+import br.com.vbruno.minhafeira.DTO.request.user.UpdateUserRequest;
 import br.com.vbruno.minhafeira.domain.User;
 
 public class UserFactory {

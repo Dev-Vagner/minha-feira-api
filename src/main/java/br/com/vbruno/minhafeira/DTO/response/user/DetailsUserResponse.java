@@ -1,4 +1,4 @@
-package br.com.vbruno.minhafeira.DTO.response;
+package br.com.vbruno.minhafeira.DTO.response.user;
 
 import lombok.*;
 
