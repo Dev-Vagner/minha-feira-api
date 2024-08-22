@@ -22,7 +22,7 @@ class ValidateUniqueEmailUserServiceTest {
 
     @Test
     @DisplayName("Não deve fazer nada quando o email for único no sistema")
-    public void naoDeveFazerNadaQuandoEmailForUnico() {
+    void naoDeveFazerNadaQuandoEmailForUnico() {
 
         String email = "teste@email.com";
         Mockito.when(userRepository.existsByEmail(email)).thenReturn(false);
@@ -34,7 +34,7 @@ class ValidateUniqueEmailUserServiceTest {
 
     @Test
     @DisplayName("Deve retornar erro quando o email já estiver cadastrado no sistema")
-    public void deveRetornarErroQuandoEmailJaTiverCadastrado() {
+    void deveRetornarErroQuandoEmailJaTiverCadastrado() {
 
         String email = "teste@email.com";
         Mockito.when(userRepository.existsByEmail(email)).thenReturn(true);

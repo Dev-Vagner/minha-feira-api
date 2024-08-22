@@ -26,7 +26,7 @@ class SearchUserServiceTest {
 
     @Test
     @DisplayName("Deve retornar usuário quando o ID do usuário for válido")
-    public void deveRetornarUsuarioQuandoIdValido() {
+    void deveRetornarUsuarioQuandoIdValido() {
         User user = UserFactory.getUser();
 
         Mockito.when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
@@ -39,7 +39,7 @@ class SearchUserServiceTest {
 
     @Test
     @DisplayName("Deve retornar erro quando o ID do usuário for inválido")
-    public void deveRetornarErroQuandoIdInvalido() {
+    void deveRetornarErroQuandoIdInvalido() {
 
         UserNotRegisteredException exception =
                     Assertions.assertThrows(UserNotRegisteredException.class, () -> tested.byId(1L));

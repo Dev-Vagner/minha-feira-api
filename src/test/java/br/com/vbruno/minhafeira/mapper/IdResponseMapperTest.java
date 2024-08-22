@@ -9,7 +9,7 @@ class IdResponseMapperTest {
 
     @Test
     @DisplayName("Deve retornar um IdResponse quando passado um ID")
-    public void deveRetornarUmUser() {
+    void deveRetornarUmUser() {
         Long id = 1L;
 
         IdResponse idResponse = IdResponseMapper.toResponse(id);

@@ -11,7 +11,7 @@ class DetailsUserMapperTest {
 
     @Test
     @DisplayName("Deve retornar um DetailsUserResponse quando passado uma entidade User")
-    public void deveRetornarUmDetailsUserResponse() {
+    void deveRetornarUmDetailsUserResponse() {
         User user = UserFactory.getUser();
 
         DetailsUserResponse detailsUserResponse = DetailsUserMapper.toResponse(user);

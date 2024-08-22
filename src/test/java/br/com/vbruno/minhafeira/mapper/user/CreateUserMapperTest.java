@@ -11,7 +11,7 @@ class CreateUserMapperTest {
 
     @Test
     @DisplayName("Deve retornar uma entidade User quando passado um CreateUserRequest")
-    public void deveRetornarUmUser() {
+    void deveRetornarUmUser() {
         CreateUserRequest createUserRequest = UserFactory.getCreateUserRequest();
 
         User user = CreateUserMapper.toEntity(createUserRequest);
