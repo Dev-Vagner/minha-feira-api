@@ -5,6 +5,7 @@ import br.com.vbruno.minhafeira.DTO.request.category.UpdateCategoryRequest;
 import br.com.vbruno.minhafeira.DTO.response.IdResponse;
 import br.com.vbruno.minhafeira.DTO.response.category.DetailsCategoryResponse;
 import br.com.vbruno.minhafeira.service.category.CreateCategoryService;
+import br.com.vbruno.minhafeira.service.category.DeleteCategoryService;
 import br.com.vbruno.minhafeira.service.category.DetailsCategoryService;
 import br.com.vbruno.minhafeira.service.category.UpdateCategoryService;
 import jakarta.validation.Valid;
@@ -25,6 +26,9 @@ public class CategoryController {
     @Autowired
     private UpdateCategoryService updateCategoryService;
 
+    @Autowired
+    private DeleteCategoryService deleteCategoryService;
+
     @GetMapping("/{idCategory}/user/{idUser}")
     public DetailsCategoryResponse details(@PathVariable Long idCategory, @PathVariable Long idUser) {
         return detailsCategoryService.details(idCategory, idUser);
@@ -42,5 +46,9 @@ public class CategoryController {
         return updateCategoryService.update(idCategory, idUser, request);
     }
 
-
+    @DeleteMapping("/{idCategory}/user/{idUser}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long idCategory, @PathVariable Long idUser) {
+        deleteCategoryService.delete(idCategory, idUser);
+    }
 }
