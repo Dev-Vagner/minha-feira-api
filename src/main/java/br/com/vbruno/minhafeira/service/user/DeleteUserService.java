@@ -1,6 +1,5 @@
 package br.com.vbruno.minhafeira.service.user;
 
-import br.com.vbruno.minhafeira.domain.User;
 import br.com.vbruno.minhafeira.repository.UserRepository;
 import br.com.vbruno.minhafeira.service.user.search.SearchUserService;
 import jakarta.transaction.Transactional;
@@ -18,8 +17,8 @@ public class DeleteUserService {
 
     @Transactional
     public void delete(Long id) {
-        User user = searchUserService.byId(id);
+        searchUserService.byId(id);
 
-        userRepository.deleteById(user.getId());
+        userRepository.deleteById(id);
     }
 }

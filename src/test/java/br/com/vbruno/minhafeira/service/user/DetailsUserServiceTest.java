@@ -1,11 +1,9 @@
 package br.com.vbruno.minhafeira.service.user;
 
-import br.com.vbruno.minhafeira.DTO.request.UpdateUserRequest;
 import br.com.vbruno.minhafeira.DTO.response.DetailsUserResponse;
 import br.com.vbruno.minhafeira.domain.User;
 import br.com.vbruno.minhafeira.exception.UserNotRegisteredException;
 import br.com.vbruno.minhafeira.factory.UserFactory;
-import br.com.vbruno.minhafeira.repository.UserRepository;
 import br.com.vbruno.minhafeira.service.user.search.SearchUserService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -24,9 +22,6 @@ class DetailsUserServiceTest {
 
     @Mock
     private SearchUserService searchUserService;
-
-    @Mock
-    private UserRepository userRepository;
 
     @Test
     @DisplayName("Deve retornar os dados detalhados do usuario com sucesso")

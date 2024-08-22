@@ -37,6 +37,7 @@ CREATE TABLE tb_market(
 	id BIGINT GENERATED ALWAYS AS IDENTITY NOT NULL,
 	date_market DATE NOT NULL,
 	total_value NUMERIC(12, 2),
+	observation VARCHAR(255),
 	user_id BIGINT NOT NULL,
 	CONSTRAINT pk_market_id PRIMARY KEY (id),
 	CONSTRAINT fk_market_user FOREIGN KEY (user_id) REFERENCES tb_user ON DELETE CASCADE

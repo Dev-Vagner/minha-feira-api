@@ -27,6 +27,8 @@ public class Market {
 
     private BigDecimal totalValue;
 
+    private String observation;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
