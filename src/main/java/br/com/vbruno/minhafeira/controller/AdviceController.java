@@ -19,6 +19,21 @@ import static org.springframework.http.HttpStatus.*;
 @ControllerAdvice
 public class AdviceController {
 
+    @ExceptionHandler(ProductInvalidException.class)
+    public ResponseEntity<ErrorResponse> handleProductInvalidException(ProductInvalidException ex, HttpServletRequest request) {
+
+        HttpStatus status = UNPROCESSABLE_ENTITY;
+
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setTimeStamp(LocalDateTime.now());
+        errorResponse.setStatus(status.value());
+        errorResponse.setReasonPhrase(status.getReasonPhrase());
+        errorResponse.setMessage(ex.getMessage());
+        errorResponse.setPath(request.getServletPath());
+
+        return new ResponseEntity<>(errorResponse, status);
+    }
+
     @ExceptionHandler(ProductRegisteredException.class)
     public ResponseEntity<ErrorResponse> handleProductRegisteredException(ProductRegisteredException ex, HttpServletRequest request) {
 
