@@ -1,6 +1,5 @@
 package br.com.vbruno.minhafeira.service.user;
 
-import br.com.vbruno.minhafeira.domain.User;
 import br.com.vbruno.minhafeira.exception.UserNotRegisteredException;
 import br.com.vbruno.minhafeira.repository.UserRepository;
 import br.com.vbruno.minhafeira.service.user.search.SearchUserService;
@@ -22,9 +21,6 @@ class DeleteUserServiceTest {
 
     @Mock
     private UserRepository userRepository;
-
-    @Captor
-    private ArgumentCaptor<User> userCaptor;
 
     @Test
     @DisplayName("Deve deletar o usuario com sucesso")
