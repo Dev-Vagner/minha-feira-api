@@ -1,12 +1,8 @@
 package br.com.vbruno.minhafeira.controller;
 
-import br.com.vbruno.minhafeira.DTO.request.category.CreateCategoryRequest;
-import br.com.vbruno.minhafeira.DTO.request.category.UpdateCategoryRequest;
 import br.com.vbruno.minhafeira.DTO.request.product.CreateProductRequest;
 import br.com.vbruno.minhafeira.DTO.request.product.UpdateProductRequest;
 import br.com.vbruno.minhafeira.DTO.response.IdResponse;
-import br.com.vbruno.minhafeira.DTO.response.category.DetailsCategoryResponse;
-import br.com.vbruno.minhafeira.DTO.response.category.ListCategoryResponse;
 import br.com.vbruno.minhafeira.DTO.response.product.DetailsProductResponse;
 import br.com.vbruno.minhafeira.DTO.response.product.ListProductResponse;
 import br.com.vbruno.minhafeira.service.product.*;

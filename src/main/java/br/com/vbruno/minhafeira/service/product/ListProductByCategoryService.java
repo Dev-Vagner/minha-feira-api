@@ -4,7 +4,6 @@ import br.com.vbruno.minhafeira.DTO.response.product.ListProductResponse;
 import br.com.vbruno.minhafeira.mapper.product.ListProductMapper;
 import br.com.vbruno.minhafeira.repository.ProductRepository;
 import br.com.vbruno.minhafeira.service.category.search.SearchCategoryFromUserService;
-import br.com.vbruno.minhafeira.service.user.search.SearchUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
