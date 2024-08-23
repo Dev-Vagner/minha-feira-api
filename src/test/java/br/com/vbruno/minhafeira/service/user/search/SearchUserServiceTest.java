@@ -34,16 +34,20 @@ class SearchUserServiceTest {
         User userReturned = tested.byId(user.getId());
 
         Mockito.verify(userRepository).findById(user.getId());
+
         Assertions.assertEquals(user, userReturned);
     }
 
     @Test
     @DisplayName("Deve retornar erro quando o ID do usuário for inválido")
     void deveRetornarErroQuandoIdInvalido() {
+        Long idUser = 1L;
 
         UserNotRegisteredException exception =
-                    Assertions.assertThrows(UserNotRegisteredException.class, () -> tested.byId(1L));
+                    Assertions.assertThrows(UserNotRegisteredException.class, () -> tested.byId(idUser));
 
-        Assertions.assertEquals("Usuário não cadastrado!", exception.getMessage());
+        Mockito.verify(userRepository).findById(idUser);
+
+        Assertions.assertEquals("Usuário não cadastrado", exception.getMessage());
     }
 }

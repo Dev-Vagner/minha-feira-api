@@ -42,6 +42,8 @@ class ValidateUniqueEmailUserServiceTest {
         EmailRegisteredException exception =
                 Assertions.assertThrows(EmailRegisteredException.class, () -> tested.validate(email));
 
-        Assertions.assertEquals("Este email já está cadastrado!", exception.getMessage());
+        Mockito.verify(userRepository).existsByEmail(email);
+
+        Assertions.assertEquals("Este email já está cadastrado", exception.getMessage());
     }
 }
