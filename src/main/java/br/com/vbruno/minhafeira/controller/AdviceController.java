@@ -1,10 +1,7 @@
 package br.com.vbruno.minhafeira.controller;
 
 import br.com.vbruno.minhafeira.DTO.response.ErrorResponse;
-import br.com.vbruno.minhafeira.exception.CategoryInvalidException;
-import br.com.vbruno.minhafeira.exception.CategoryRegisteredException;
-import br.com.vbruno.minhafeira.exception.EmailRegisteredException;
-import br.com.vbruno.minhafeira.exception.UserNotRegisteredException;
+import br.com.vbruno.minhafeira.exception.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +18,21 @@ import static org.springframework.http.HttpStatus.*;
 
 @ControllerAdvice
 public class AdviceController {
+
+    @ExceptionHandler(ProductRegisteredException.class)
+    public ResponseEntity<ErrorResponse> handleProductRegisteredException(ProductRegisteredException ex, HttpServletRequest request) {
+
+        HttpStatus status = UNPROCESSABLE_ENTITY;
+
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setTimeStamp(LocalDateTime.now());
+        errorResponse.setStatus(status.value());
+        errorResponse.setReasonPhrase(status.getReasonPhrase());
+        errorResponse.setMessage(ex.getMessage());
+        errorResponse.setPath(request.getServletPath());
+
+        return new ResponseEntity<>(errorResponse, status);
+    }
 
     @ExceptionHandler(CategoryInvalidException.class)
     public ResponseEntity<ErrorResponse> handleCategoryInvalidException(CategoryInvalidException ex, HttpServletRequest request) {
