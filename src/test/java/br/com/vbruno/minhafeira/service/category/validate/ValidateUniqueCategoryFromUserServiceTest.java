@@ -24,7 +24,6 @@ class ValidateUniqueCategoryFromUserServiceTest {
     @Test
     @DisplayName("Não deve fazer nada quando o usuario ainda não tiver cadastrado uma categoria com aquele nome no sistema")
     void naoDeveFazerNadaQuandoCategoriaForUnicaParaUsuario() {
-
         String nameCategory = "Categoria teste";
         Long idUser = 1L;
 
@@ -38,7 +37,6 @@ class ValidateUniqueCategoryFromUserServiceTest {
     @Test
     @DisplayName("Deve retornar erro quando o usuario já tiver cadastrado uma categoria com aquele nome no sistema")
     void deveRetornarErroQuandoCategoriaNaoForUnicaParaUsuario() {
-
         String nameCategory = "Categoria teste";
         Long idUser = 1L;
 

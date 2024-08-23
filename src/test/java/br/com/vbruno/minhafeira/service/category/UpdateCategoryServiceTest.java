@@ -5,8 +5,6 @@ import br.com.vbruno.minhafeira.DTO.response.IdResponse;
 import br.com.vbruno.minhafeira.domain.Category;
 import br.com.vbruno.minhafeira.exception.CategoryInvalidException;
 import br.com.vbruno.minhafeira.exception.CategoryRegisteredException;
-import br.com.vbruno.minhafeira.exception.EmailRegisteredException;
-import br.com.vbruno.minhafeira.exception.UserNotRegisteredException;
 import br.com.vbruno.minhafeira.factory.CategoryFactory;
 import br.com.vbruno.minhafeira.repository.CategoryRepository;
 import br.com.vbruno.minhafeira.service.category.search.SearchCategoryFromUserService;
