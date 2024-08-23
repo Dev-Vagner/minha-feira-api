@@ -54,6 +54,7 @@ class CreateUserServiceTest {
 
         Assertions.assertThrows(EmailRegisteredException.class, () -> tested.register(createUserRequest));
 
+        Mockito.verify(validateUniqueEmailUserService).validate(createUserRequest.getEmail());
         Mockito.verify(userRepository, Mockito.never()).save(userCaptor.capture());
     }
 }
