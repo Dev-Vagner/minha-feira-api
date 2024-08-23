@@ -19,14 +19,14 @@ public class CategoryFactory {
 
     public static CreateCategoryRequest getCreateCategoryRequest() {
         CreateCategoryRequest request = new CreateCategoryRequest();
-        request.setName("Categoria teste");
+        request.setName("Criação Categoria teste");
 
         return request;
     }
 
     public static UpdateCategoryRequest getUpdateCategoryRequest() {
         UpdateCategoryRequest request = new UpdateCategoryRequest();
-        request.setName("Categoria teste");
+        request.setName("Edição Categoria teste");
 
         return request;
     }
