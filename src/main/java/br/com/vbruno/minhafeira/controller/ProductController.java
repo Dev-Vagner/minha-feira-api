@@ -25,6 +25,9 @@ public class ProductController {
     private ListProductService listProductService;
 
     @Autowired
+    private ListProductByCategoryService listProductByCategoryService;
+
+    @Autowired
     private DetailsProductService detailsProductService;
 
     @Autowired
@@ -39,6 +42,11 @@ public class ProductController {
     @GetMapping("/user/{idUser}")
     public List<ListProductResponse> list(@PathVariable Long idUser) {
         return listProductService.list(idUser);
+    }
+
+    @GetMapping("category/{idCategory}/user/{idUser}")
+    public List<ListProductResponse> listByCategory(@PathVariable Long idCategory, @PathVariable Long idUser) {
+        return listProductByCategoryService.listByCategory(idCategory, idUser);
     }
 
     @GetMapping("/{idProduct}/user/{idUser}")
