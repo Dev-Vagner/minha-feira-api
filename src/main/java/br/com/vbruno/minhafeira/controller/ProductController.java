@@ -6,19 +6,23 @@ import br.com.vbruno.minhafeira.DTO.request.product.CreateProductRequest;
 import br.com.vbruno.minhafeira.DTO.request.product.UpdateProductRequest;
 import br.com.vbruno.minhafeira.DTO.response.IdResponse;
 import br.com.vbruno.minhafeira.DTO.response.category.DetailsCategoryResponse;
+import br.com.vbruno.minhafeira.DTO.response.category.ListCategoryResponse;
 import br.com.vbruno.minhafeira.DTO.response.product.DetailsProductResponse;
-import br.com.vbruno.minhafeira.service.product.CreateProductService;
-import br.com.vbruno.minhafeira.service.product.DeleteProductService;
-import br.com.vbruno.minhafeira.service.product.DetailsProductService;
-import br.com.vbruno.minhafeira.service.product.UpdateProductService;
+import br.com.vbruno.minhafeira.DTO.response.product.ListProductResponse;
+import br.com.vbruno.minhafeira.service.product.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/products")
 public class ProductController {
+
+    @Autowired
+    private ListProductService listProductService;
 
     @Autowired
     private DetailsProductService detailsProductService;
@@ -31,6 +35,11 @@ public class ProductController {
 
     @Autowired
     private DeleteProductService deleteProductService;
+
+    @GetMapping("/user/{idUser}")
+    public List<ListProductResponse> list(@PathVariable Long idUser) {
+        return listProductService.list(idUser);
+    }
 
     @GetMapping("/{idProduct}/user/{idUser}")
     public DetailsProductResponse details(@PathVariable Long idProduct, @PathVariable Long idUser) {
