@@ -7,8 +7,7 @@ import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    boolean existsByNameIgnoreCaseAndUserId(String productName, Long userId);
+    boolean existsByNameIgnoreCaseAndUserIdAndActiveTrue(String productName, Long userId);
 
-    Optional<Product> findByIdAndUserId(Long productId, Long userId);
-
+    Optional<Product> findByIdAndUserIdAndActiveTrue(Long productId, Long userId);
 }

@@ -12,7 +12,7 @@ public class ValidateUniqueProductFromUserService {
     private ProductRepository productRepository;
 
     public void validate(String nameProduct, Long idUser) {
-        boolean existsProduct = productRepository.existsByNameIgnoreCaseAndUserId(nameProduct, idUser);
+        boolean existsProduct = productRepository.existsByNameIgnoreCaseAndUserIdAndActiveTrue(nameProduct, idUser);
 
         if(existsProduct) throw new ProductRegisteredException("Este produto já está cadastrado");
     }

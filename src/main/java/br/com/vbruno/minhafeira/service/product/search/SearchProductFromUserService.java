@@ -13,7 +13,7 @@ public class SearchProductFromUserService {
     private ProductRepository productRepository;
 
     public Product byId(Long productId, Long userId) {
-        return productRepository.findByIdAndUserId(productId, userId)
+        return productRepository.findByIdAndUserIdAndActiveTrue(productId, userId)
                 .orElseThrow(() -> new ProductInvalidException("Produto inválido"));
     }
 }
