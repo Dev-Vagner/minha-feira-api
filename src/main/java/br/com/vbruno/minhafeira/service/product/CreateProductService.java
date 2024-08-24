@@ -8,6 +8,7 @@ import br.com.vbruno.minhafeira.domain.User;
 import br.com.vbruno.minhafeira.mapper.IdResponseMapper;
 import br.com.vbruno.minhafeira.repository.ProductRepository;
 import br.com.vbruno.minhafeira.service.category.search.SearchCategoryFromUserService;
+import br.com.vbruno.minhafeira.service.product.search.SearchProductFromUserService;
 import br.com.vbruno.minhafeira.service.product.validate.ValidateUniqueProductFromUserService;
 import br.com.vbruno.minhafeira.service.user.search.SearchUserService;
 import jakarta.transaction.Transactional;
@@ -27,6 +28,9 @@ public class CreateProductService {
     private SearchCategoryFromUserService searchCategoryFromUserService;
 
     @Autowired
+    private SearchProductFromUserService searchProductFromUserService;
+
+    @Autowired
     private ProductRepository productRepository;
 
     @Transactional
@@ -36,6 +40,11 @@ public class CreateProductService {
         validateUniqueProductFromUserService.validate(request.getName(), idUser);
 
         Product product = new Product();
+
+        Product productRemoved = searchProductFromUserService.byNameAndNotActive(request.getName(), idUser);
+        if(productRemoved != null) {
+            product.setId(productRemoved.getId());
+        }
 
         if(request.getCategoryId() != null) {
             Category category = searchCategoryFromUserService.byId(request.getCategoryId(), idUser);

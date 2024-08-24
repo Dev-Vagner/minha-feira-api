@@ -16,4 +16,8 @@ public class SearchProductFromUserService {
         return productRepository.findByIdAndUserIdAndActiveTrue(productId, userId)
                 .orElseThrow(() -> new ProductInvalidException("Produto inválido"));
     }
+
+    public Product byNameAndNotActive(String productName, Long userId) {
+        return productRepository.findByNameIgnoreCaseAndUserIdAndActiveFalse(productName, userId);
+    }
 }
