@@ -19,8 +19,7 @@ class DetailsProductMapperTest {
         Assertions.assertNotNull(detailsProductResponse);
         Assertions.assertEquals(productComplete.getId(), detailsProductResponse.getId());
         Assertions.assertEquals(productComplete.getName(), detailsProductResponse.getName());
-        Assertions.assertEquals(productComplete.getCategory().getId(), detailsProductResponse.getIdCategory());
-        Assertions.assertEquals(productComplete.getCategory().getName(), detailsProductResponse.getNameCategory());
+        Assertions.assertEquals(productComplete.getCategory().getName(), detailsProductResponse.getCategory());
     }
 
     @Test
@@ -33,7 +32,6 @@ class DetailsProductMapperTest {
         Assertions.assertNotNull(detailsProductResponse);
         Assertions.assertEquals(productNotCategory.getId(), detailsProductResponse.getId());
         Assertions.assertEquals(productNotCategory.getName(), detailsProductResponse.getName());
-        Assertions.assertNull(detailsProductResponse.getIdCategory());
-        Assertions.assertNull(detailsProductResponse.getNameCategory());
+        Assertions.assertNull(detailsProductResponse.getCategory());
     }
 }

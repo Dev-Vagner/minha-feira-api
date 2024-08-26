@@ -15,8 +15,7 @@ public class DetailsProductMapper {
     public static DetailsProductResponse toResponseCategoryNotNull(Product product) {
         DetailsProductResponse detailsProductResponse = toResponseBase(product);
 
-        detailsProductResponse.setIdCategory(product.getCategory().getId());
-        detailsProductResponse.setNameCategory(product.getCategory().getName());
+        detailsProductResponse.setCategory(product.getCategory().getName());
 
         return detailsProductResponse;
     }

@@ -10,6 +10,5 @@ import lombok.*;
 public class DetailsProductResponse {
     private Long id;
     private String name;
-    private Long idCategory;
-    private String nameCategory;
+    private String category;
 }
