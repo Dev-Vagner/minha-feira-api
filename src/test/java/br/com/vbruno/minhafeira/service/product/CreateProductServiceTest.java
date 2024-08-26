@@ -160,10 +160,7 @@ class CreateProductServiceTest {
     @Test
     @DisplayName("Deve retornar erro quando tentar cadastrar produto com id de categoria inválida para aquele usuário")
     void deveRetornarErroQuandoIdCategoriaInvalidoParaUsuario() {
-
-
         CreateProductRequest createProductRequest = ProductFactory.getCreateProductRequestWithCategory();
-        Long idCategory = 1L;
         User user = UserFactory.getUser();
         Long idUser = 2L;
 
@@ -171,7 +168,7 @@ class CreateProductServiceTest {
         Mockito.when(searchProductFromUserService.byNameAndNotActive(createProductRequest.getName(), idUser)).thenReturn(null);
 
         Mockito.doThrow(CategoryInvalidException.class)
-                .when(searchCategoryFromUserService).byId(idCategory, idUser);
+                .when(searchCategoryFromUserService).byId(createProductRequest.getCategoryId(), idUser);
 
         Assertions.assertThrows(CategoryInvalidException.class, () -> tested.register(idUser, createProductRequest));
 
