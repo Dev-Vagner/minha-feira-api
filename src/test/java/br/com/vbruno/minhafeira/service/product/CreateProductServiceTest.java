@@ -6,7 +6,6 @@ import br.com.vbruno.minhafeira.domain.Category;
 import br.com.vbruno.minhafeira.domain.Product;
 import br.com.vbruno.minhafeira.domain.User;
 import br.com.vbruno.minhafeira.exception.CategoryInvalidException;
-import br.com.vbruno.minhafeira.exception.CategoryRegisteredException;
 import br.com.vbruno.minhafeira.exception.ProductRegisteredException;
 import br.com.vbruno.minhafeira.factory.CategoryFactory;
 import br.com.vbruno.minhafeira.factory.ProductFactory;

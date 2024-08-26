@@ -42,7 +42,7 @@ public class ProductFactory {
 
     public static CreateProductRequest getCreateProductRequestWithCategory() {
         CreateProductRequest request = getCreateProductRequestNotCategory();
-        request.setCategoryId(1L);
+        request.setCategoryId(4L);
 
         return request;
     }
@@ -57,7 +57,7 @@ public class ProductFactory {
 
     public static UpdateProductRequest getUpdateProductRequestWithCategory() {
         UpdateProductRequest request = getUpdateProductRequestNotCategory();
-        request.setCategoryId(2L);
+        request.setCategoryId(5L);
 
         return request;
     }
