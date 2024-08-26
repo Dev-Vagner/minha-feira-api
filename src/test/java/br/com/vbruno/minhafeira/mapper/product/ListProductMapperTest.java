@@ -12,7 +12,7 @@ class ListProductMapperTest {
     @Test
     @DisplayName("Deve retornar um ListProductResponse quando passado uma entidade Product")
     void deveRetornarUmListProductResponse() {
-        Product product = ProductFactory.getProductComplete();
+        Product product = ProductFactory.getProductWithCategory();
 
         ListProductResponse listProductResponse = ListProductMapper.toResponse(product);
 

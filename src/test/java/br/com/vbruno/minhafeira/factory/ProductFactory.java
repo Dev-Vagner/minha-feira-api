@@ -19,9 +19,16 @@ public class ProductFactory {
                 .build();
     }
 
-    public static Product getProductComplete() {
+    public static Product getProductWithCategory() {
         Product product = getProductNotCategory();
         product.setCategory(CATEGORY_TEST);
+
+        return product;
+    }
+
+    public static Product getProductNotActive() {
+        Product product = getProductWithCategory();
+        product.setActive(false);
 
         return product;
     }
@@ -33,7 +40,7 @@ public class ProductFactory {
         return request;
     }
 
-    public static CreateProductRequest getCreateProductRequestComplete() {
+    public static CreateProductRequest getCreateProductRequestWithCategory() {
         CreateProductRequest request = getCreateProductRequestNotCategory();
         request.setCategoryId(1L);
 
@@ -48,7 +55,7 @@ public class ProductFactory {
         return request;
     }
 
-    public static UpdateProductRequest getUpdateProductRequestComplete() {
+    public static UpdateProductRequest getUpdateProductRequestWithCategory() {
         UpdateProductRequest request = getUpdateProductRequestNotCategory();
         request.setCategoryId(2L);
 

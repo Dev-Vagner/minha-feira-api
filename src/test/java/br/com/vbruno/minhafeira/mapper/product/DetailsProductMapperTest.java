@@ -12,7 +12,7 @@ class DetailsProductMapperTest {
     @Test
     @DisplayName("Deve retornar um DetailsProductResponse com categoria quando passado uma entidade Product com categoria")
     void deveRetornarUmDetailsProductResponseComCategoria() {
-        Product productComplete = ProductFactory.getProductComplete();
+        Product productComplete = ProductFactory.getProductWithCategory();
 
         DetailsProductResponse detailsProductResponse = DetailsProductMapper.toResponseCategoryNotNull(productComplete);
 

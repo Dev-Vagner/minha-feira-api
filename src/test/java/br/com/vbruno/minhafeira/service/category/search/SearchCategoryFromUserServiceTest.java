@@ -41,7 +41,7 @@ class SearchCategoryFromUserServiceTest {
 
     @Test
     @DisplayName("Deve retornar erro quando o ID da categoria for inválido para o usuário passado")
-    void deveRetornarErroQuandoIdInvalidoParaUsuario() {
+    void deveRetornarErroQuandoIdCategoriaInvalidoParaUsuario() {
         Long idCategory = 1L;
         Long idUser = 2L;
 
