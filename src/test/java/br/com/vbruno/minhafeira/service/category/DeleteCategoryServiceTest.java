@@ -36,7 +36,7 @@ class DeleteCategoryServiceTest {
 
     @Test
     @DisplayName("Deve retornar erro quando tentar deletar a categoria mas o ID da categoria for inválido para aquele usuário")
-    void deveRetornarErroQuandoIdInvalido() {
+    void deveRetornarErroQuandoIdCategoriaInvalido() {
         Long idCategory = 1L;
         Long idUser = 2L;
 
