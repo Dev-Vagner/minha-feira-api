@@ -8,9 +8,9 @@ import br.com.vbruno.minhafeira.mapper.IdResponseMapper;
 import br.com.vbruno.minhafeira.repository.CategoryRepository;
 import br.com.vbruno.minhafeira.service.category.validate.ValidateUniqueCategoryFromUserService;
 import br.com.vbruno.minhafeira.service.user.search.SearchUserService;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CreateCategoryService {

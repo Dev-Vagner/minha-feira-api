@@ -11,9 +11,9 @@ import br.com.vbruno.minhafeira.service.category.search.SearchCategoryFromUserSe
 import br.com.vbruno.minhafeira.service.product.search.SearchProductFromUserService;
 import br.com.vbruno.minhafeira.service.product.validate.ValidateUniqueProductFromUserService;
 import br.com.vbruno.minhafeira.service.user.search.SearchUserService;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CreateProductService {
