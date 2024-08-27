@@ -42,12 +42,12 @@ public class CreateMarketService {
     public IdResponse register(Long idUser, CreateMarketRequest request) {
         User user = searchUserService.byId(idUser);
 
-        List<Long> listIdsProducts = request.getListCreateProductQuantityRequest().stream()
+        List<Long> listIdsProducts = request.getListProductsQuantities().stream()
                 .map(CreateProductQuantityRequest::getProductId).toList();
 
         validateUniqueProductFromMarketService.validate(listIdsProducts);
 
-        List<ProductQuantity> listProductQuantity = request.getListCreateProductQuantityRequest().stream()
+        List<ProductQuantity> listProductQuantity = request.getListProductsQuantities().stream()
                 .map(productQuantity -> {
                     Product product = searchProductFromUserService.byId(productQuantity.getProductId(), idUser);
 

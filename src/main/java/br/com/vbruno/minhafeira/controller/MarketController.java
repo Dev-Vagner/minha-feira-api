@@ -1,6 +1,7 @@
 package br.com.vbruno.minhafeira.controller;
 
 import br.com.vbruno.minhafeira.DTO.request.market.CreateMarketRequest;
+import br.com.vbruno.minhafeira.DTO.request.market.CreateProductQuantityRequest;
 import br.com.vbruno.minhafeira.DTO.response.IdResponse;
 import br.com.vbruno.minhafeira.service.market.CreateMarketService;
 import jakarta.validation.Valid;

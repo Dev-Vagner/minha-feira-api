@@ -1,6 +1,7 @@
 package br.com.vbruno.minhafeira.DTO.request.market;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,6 +11,8 @@ import java.util.List;
 @Setter
 public class CreateMarketRequest {
 
-    @NotNull(message = "É necessário passar uma lista de produtos e quantidades para cadastrar uma nova feira")
-    private List<CreateProductQuantityRequest> listCreateProductQuantityRequest;
+    @NotEmpty(message = "A lista de produtos e quantidades não pode está vazia")
+
+    @Valid
+    private List<CreateProductQuantityRequest> listProductsQuantities;
 }
