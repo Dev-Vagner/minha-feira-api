@@ -19,8 +19,23 @@ import static org.springframework.http.HttpStatus.*;
 @ControllerAdvice
 public class AdviceController {
 
-    @ExceptionHandler(ProductMarketNotUniqueException.class)
-    public ResponseEntity<ErrorResponse> handleProductMarketNotUniqueException(ProductMarketNotUniqueException ex, HttpServletRequest request) {
+    @ExceptionHandler(MarketInvalidException.class)
+    public ResponseEntity<ErrorResponse> handleMarketInvalidException(MarketInvalidException ex, HttpServletRequest request) {
+
+        HttpStatus status = UNPROCESSABLE_ENTITY;
+
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setTimeStamp(LocalDateTime.now());
+        errorResponse.setStatus(status.value());
+        errorResponse.setReasonPhrase(status.getReasonPhrase());
+        errorResponse.setMessage(ex.getMessage());
+        errorResponse.setPath(request.getServletPath());
+
+        return new ResponseEntity<>(errorResponse, status);
+    }
+
+    @ExceptionHandler(ProductNotUniqueMarketException.class)
+    public ResponseEntity<ErrorResponse> handleProductMarketNotUniqueException(ProductNotUniqueMarketException ex, HttpServletRequest request) {
 
         HttpStatus status = UNPROCESSABLE_ENTITY;
 

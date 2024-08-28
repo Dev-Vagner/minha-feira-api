@@ -1,37 +1,34 @@
 package br.com.vbruno.minhafeira.service.market;
 
-import br.com.vbruno.minhafeira.DTO.request.market.CreateMarketRequest;
-import br.com.vbruno.minhafeira.DTO.request.market.CreateProductQuantityRequest;
-import br.com.vbruno.minhafeira.DTO.request.market.IProductQuantity;
+import br.com.vbruno.minhafeira.DTO.request.market.UpdateMarketRequest;
+import br.com.vbruno.minhafeira.DTO.request.market.UpdateProductQuantityRequest;
 import br.com.vbruno.minhafeira.DTO.response.IdResponse;
 import br.com.vbruno.minhafeira.domain.Market;
 import br.com.vbruno.minhafeira.domain.Product;
 import br.com.vbruno.minhafeira.domain.ProductQuantity;
-import br.com.vbruno.minhafeira.domain.User;
 import br.com.vbruno.minhafeira.mapper.IdResponseMapper;
 import br.com.vbruno.minhafeira.repository.MarketRepository;
 import br.com.vbruno.minhafeira.repository.ProductQuantityRepository;
+import br.com.vbruno.minhafeira.service.market.search.SearchMarketFromUserService;
 import br.com.vbruno.minhafeira.service.market.validate.ValidateUniqueProductFromMarketService;
 import br.com.vbruno.minhafeira.service.product.search.SearchProductFromUserService;
-import br.com.vbruno.minhafeira.service.user.search.SearchUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Service
-public class CreateMarketService {
+public class UpdateMarketService {
 
     @Autowired
     private ValidateUniqueProductFromMarketService validateUniqueProductFromMarketService;
 
     @Autowired
-    private SearchUserService searchUserService;
+    private SearchProductFromUserService searchProductFromUserService;
 
     @Autowired
-    private SearchProductFromUserService searchProductFromUserService;
+    private SearchMarketFromUserService searchMarketFromUserService;
 
     @Autowired
     private ProductQuantityRepository productQuantityRepository;
@@ -40,18 +37,17 @@ public class CreateMarketService {
     private MarketRepository marketRepository;
 
     @Transactional
-    public IdResponse register(Long idUser, CreateMarketRequest request) {
-        User user = searchUserService.byId(idUser);
+    public IdResponse update(Long idMarket, Long idUser, UpdateMarketRequest request) {
+        Market market = searchMarketFromUserService.byId(idMarket, idUser);
 
         List<Long> listIdsProducts = request.getListProductsQuantities().stream()
-                .map(IProductQuantity::getProductId).toList();
+                .map(UpdateProductQuantityRequest::getProductId).toList();
 
         validateUniqueProductFromMarketService.validate(listIdsProducts);
 
-        Market market = new Market();
-        market.setDateMarket(LocalDate.now());
+        market.setDateMarket(request.getDateMarket());
+        market.setTotalValue(request.getTotalValue());
         market.setObservation(request.getObservation());
-        market.setUser(user);
 
         marketRepository.save(market);
 
@@ -62,11 +58,14 @@ public class CreateMarketService {
                     ProductQuantity productQuantityValidate = new ProductQuantity();
                     productQuantityValidate.setProduct(product);
                     productQuantityValidate.setQuantity(productQuantity.getQuantity());
+                    productQuantityValidate.setUnitValue(productQuantity.getUnitValue());
                     productQuantityValidate.setMarket(market);
 
                     return productQuantityValidate;
                 })
                 .toList();
+
+        productQuantityRepository.deleteAllByMarketId(market.getId());
 
         productQuantityRepository.saveAll(listProductQuantity);
 

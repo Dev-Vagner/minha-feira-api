@@ -1,6 +1,6 @@
 package br.com.vbruno.minhafeira.service.market.validate;
 
-import br.com.vbruno.minhafeira.exception.ProductMarketNotUniqueException;
+import br.com.vbruno.minhafeira.exception.ProductNotUniqueMarketException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,8 +29,8 @@ class ValidateUniqueProductFromMarketServiceTest {
     void deveRetornarErroQuandoHouverIdsProdutosDuplicados() {
         List<Long> listIdsProductsDuplicate = List.of(1L, 2L, 3L, 1L);
 
-        ProductMarketNotUniqueException exception =
-                Assertions.assertThrows(ProductMarketNotUniqueException.class, () -> tested.validate(listIdsProductsDuplicate));
+        ProductNotUniqueMarketException exception =
+                Assertions.assertThrows(ProductNotUniqueMarketException.class, () -> tested.validate(listIdsProductsDuplicate));
 
         Assertions.assertEquals("Não pode haver produtos repetidos na feira", exception.getMessage());
     }

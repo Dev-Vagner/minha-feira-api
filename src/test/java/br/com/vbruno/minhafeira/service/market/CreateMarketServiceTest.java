@@ -7,7 +7,7 @@ import br.com.vbruno.minhafeira.domain.Product;
 import br.com.vbruno.minhafeira.domain.ProductQuantity;
 import br.com.vbruno.minhafeira.domain.User;
 import br.com.vbruno.minhafeira.exception.ProductInvalidException;
-import br.com.vbruno.minhafeira.exception.ProductMarketNotUniqueException;
+import br.com.vbruno.minhafeira.exception.ProductNotUniqueMarketException;
 import br.com.vbruno.minhafeira.factory.MarketFactory;
 import br.com.vbruno.minhafeira.factory.ProductFactory;
 import br.com.vbruno.minhafeira.factory.UserFactory;
@@ -47,7 +47,7 @@ class CreateMarketServiceTest {
     private MarketRepository marketRepository;
 
     @Captor
-    private ArgumentCaptor<ProductQuantity> productQuantityCaptor;
+    private ArgumentCaptor<List<ProductQuantity>> listProductQuantityCaptor;
 
     @Captor
     private ArgumentCaptor<Market> marketCaptor;
@@ -69,15 +69,15 @@ class CreateMarketServiceTest {
 
         Mockito.verify(searchUserService).byId(idUser);
         Mockito.verify(validateUniqueProductFromMarketService).validate(listIdProduct);
-        Mockito.verify(searchProductFromUserService).byId(idProductFromList, idUser);
         Mockito.verify(marketRepository).save(marketCaptor.capture());
-        Mockito.verify(productQuantityRepository).save(productQuantityCaptor.capture());
+        Mockito.verify(searchProductFromUserService).byId(idProductFromList, idUser);
+        Mockito.verify(productQuantityRepository).saveAll(listProductQuantityCaptor.capture());
 
         Market marketSaved = marketCaptor.getValue();
-        ProductQuantity productQuantitySaved = productQuantityCaptor.getValue();
+        List<ProductQuantity> listProductQuantitySaved = listProductQuantityCaptor.getValue();
 
         Assertions.assertEquals(marketSaved.getId(), idResponse.getId());
-        Assertions.assertEquals(marketSaved, productQuantitySaved.getMarket());
+        Assertions.assertEquals(marketSaved, listProductQuantitySaved.get(0).getMarket());
     }
 
     @Test
@@ -91,16 +91,16 @@ class CreateMarketServiceTest {
 
         Mockito.when(searchUserService.byId(idUser)).thenReturn(user);
 
-        Mockito.doThrow(ProductMarketNotUniqueException.class)
+        Mockito.doThrow(ProductNotUniqueMarketException.class)
                 .when(validateUniqueProductFromMarketService).validate(listIdProduct);
 
-        Assertions.assertThrows(ProductMarketNotUniqueException.class, () -> tested.register(idUser, createMarketRequest));
+        Assertions.assertThrows(ProductNotUniqueMarketException.class, () -> tested.register(idUser, createMarketRequest));
 
         Mockito.verify(searchUserService).byId(idUser);
         Mockito.verify(validateUniqueProductFromMarketService).validate(listIdProduct);
-        Mockito.verify(searchProductFromUserService, Mockito.never()).byId(idProductFromList, idUser);
         Mockito.verify(marketRepository, Mockito.never()).save(marketCaptor.capture());
-        Mockito.verify(productQuantityRepository, Mockito.never()).save(productQuantityCaptor.capture());
+        Mockito.verify(searchProductFromUserService, Mockito.never()).byId(idProductFromList, idUser);
+        Mockito.verify(productQuantityRepository, Mockito.never()).saveAll(listProductQuantityCaptor.capture());
     }
 
     @Test
@@ -121,8 +121,8 @@ class CreateMarketServiceTest {
 
         Mockito.verify(searchUserService).byId(idUser);
         Mockito.verify(validateUniqueProductFromMarketService).validate(listIdProduct);
+        Mockito.verify(marketRepository).save(marketCaptor.capture());
         Mockito.verify(searchProductFromUserService).byId(idProductFromList, idUser);
-        Mockito.verify(marketRepository, Mockito.never()).save(marketCaptor.capture());
-        Mockito.verify(productQuantityRepository, Mockito.never()).save(productQuantityCaptor.capture());
+        Mockito.verify(productQuantityRepository, Mockito.never()).saveAll(listProductQuantityCaptor.capture());
     }
 }
