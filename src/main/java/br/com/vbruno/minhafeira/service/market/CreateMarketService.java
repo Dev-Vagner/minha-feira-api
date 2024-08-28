@@ -2,7 +2,6 @@ package br.com.vbruno.minhafeira.service.market;
 
 import br.com.vbruno.minhafeira.DTO.request.market.CreateMarketRequest;
 import br.com.vbruno.minhafeira.DTO.request.market.CreateProductQuantityRequest;
-import br.com.vbruno.minhafeira.DTO.request.market.UpdateProductQuantityRequest;
 import br.com.vbruno.minhafeira.DTO.response.IdResponse;
 import br.com.vbruno.minhafeira.domain.Market;
 import br.com.vbruno.minhafeira.domain.Product;

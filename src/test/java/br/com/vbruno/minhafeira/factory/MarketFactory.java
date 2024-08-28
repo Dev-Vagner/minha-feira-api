@@ -6,6 +6,7 @@ import br.com.vbruno.minhafeira.DTO.request.market.UpdateMarketRequest;
 import br.com.vbruno.minhafeira.DTO.request.market.UpdateProductQuantityRequest;
 import br.com.vbruno.minhafeira.domain.Market;
 import br.com.vbruno.minhafeira.domain.Product;
+import br.com.vbruno.minhafeira.domain.ProductQuantity;
 import br.com.vbruno.minhafeira.domain.User;
 
 import java.math.BigDecimal;
@@ -15,6 +16,7 @@ import java.util.List;
 public class MarketFactory {
 
     private static final User USER_TEST = UserFactory.getUser();
+    private static final Product PRODUCT_TEST = ProductFactory.getProductWithCategory();
 
     public static Market getMarket() {
         return Market.builder()
@@ -23,6 +25,16 @@ public class MarketFactory {
                 .totalValue(new BigDecimal("25.5"))
                 .observation("Observação teste")
                 .user(USER_TEST)
+                .build();
+    }
+
+    public static ProductQuantity getProductQuantity() {
+        return ProductQuantity.builder()
+                .id(1L)
+                .product(PRODUCT_TEST)
+                .quantity(5)
+                .unitValue(new BigDecimal("10.5"))
+                .market(getMarket())
                 .build();
     }
 
