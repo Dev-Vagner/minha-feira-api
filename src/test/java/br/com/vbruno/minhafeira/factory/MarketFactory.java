@@ -2,6 +2,8 @@ package br.com.vbruno.minhafeira.factory;
 
 import br.com.vbruno.minhafeira.DTO.request.market.CreateMarketRequest;
 import br.com.vbruno.minhafeira.DTO.request.market.CreateProductQuantityRequest;
+import br.com.vbruno.minhafeira.DTO.request.market.UpdateMarketRequest;
+import br.com.vbruno.minhafeira.DTO.request.market.UpdateProductQuantityRequest;
 import br.com.vbruno.minhafeira.domain.Market;
 import br.com.vbruno.minhafeira.domain.Product;
 import br.com.vbruno.minhafeira.domain.User;
@@ -13,18 +15,41 @@ import java.util.List;
 public class MarketFactory {
 
     private static final User USER_TEST = UserFactory.getUser();
-    private static final Product PRODUCT_TEST = ProductFactory.getProductWithCategory();
 
     public static Market getMarket() {
-        return new Market(1L, LocalDate.now(), new BigDecimal("30"), "Observação teste", USER_TEST);
+        return Market.builder()
+                .id(1L)
+                .dateMarket(LocalDate.now())
+                .totalValue(new BigDecimal("25.5"))
+                .observation("Observação teste")
+                .user(USER_TEST)
+                .build();
     }
 
     public static CreateMarketRequest getCreateMarketRequest() {
-        CreateProductQuantityRequest productQuantity = new CreateProductQuantityRequest(1L, 5);
+        CreateProductQuantityRequest productQuantity = new CreateProductQuantityRequest();
+        productQuantity.setProductId(1L);
+        productQuantity.setQuantity(5);
 
-        List<CreateProductQuantityRequest> listProductQuantity = List.of(productQuantity);
-        String observation = "Observação teste";
+        CreateMarketRequest market = new CreateMarketRequest();
+        market.setListProductsQuantities(List.of(productQuantity));
+        market.setObservation("Observação criação teste");
 
-        return new CreateMarketRequest(listProductQuantity, observation);
+        return market;
+    }
+
+    public static UpdateMarketRequest getUpdateMarketRequest() {
+        UpdateProductQuantityRequest productQuantity = new UpdateProductQuantityRequest();
+        productQuantity.setProductId(1L);
+        productQuantity.setQuantity(5);
+        productQuantity.setUnitValue(new BigDecimal("7.25"));
+
+        UpdateMarketRequest market = new UpdateMarketRequest();
+        market.setDateMarket(LocalDate.now());
+        market.setListProductsQuantities(List.of(productQuantity));
+        market.setTotalValue(new BigDecimal("50"));
+        market.setObservation("Observação edição teste");
+
+        return market;
     }
 }
