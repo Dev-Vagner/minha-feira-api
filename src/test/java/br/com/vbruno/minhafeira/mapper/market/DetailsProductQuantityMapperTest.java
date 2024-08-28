@@ -17,9 +17,9 @@ class DetailsProductQuantityMapperTest {
         DetailsProductQuantityResponse detailsProductQuantityResponse = DetailsProductQuantityMapper.toResponse(productQuantity);
 
         Assertions.assertNotNull(detailsProductQuantityResponse);
-        Assertions.assertEquals(productQuantity.getProduct(), detailsProductQuantityResponse.getProduct());
+        Assertions.assertEquals(productQuantity.getProduct().getName(), detailsProductQuantityResponse.getProduct());
         Assertions.assertEquals(productQuantity.getQuantity(), detailsProductQuantityResponse.getQuantity());
         Assertions.assertEquals(productQuantity.getUnitValue(), detailsProductQuantityResponse.getUnitValue());
-        Assertions.assertNull(detailsProductQuantityResponse.getProductQuantityValue());
+        Assertions.assertNull(detailsProductQuantityResponse.getTotalValue());
     }
 }

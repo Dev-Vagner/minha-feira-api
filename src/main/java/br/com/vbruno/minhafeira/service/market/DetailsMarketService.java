@@ -44,7 +44,7 @@ public class DetailsMarketService {
                 BigDecimal quantityProduct = BigDecimal.valueOf(productQuantityResponse.getQuantity());
 
                 BigDecimal productQuantityValue = unitValueProduct.multiply(quantityProduct);
-                productQuantityResponse.setProductQuantityValue(productQuantityValue);
+                productQuantityResponse.setTotalValue(productQuantityValue);
             }
 
             return productQuantityResponse;

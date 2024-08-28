@@ -7,7 +7,7 @@ public class DetailsProductQuantityMapper {
 
     public static DetailsProductQuantityResponse toResponse(ProductQuantity productQuantity) {
         return DetailsProductQuantityResponse.builder()
-                .product(productQuantity.getProduct())
+                .product(productQuantity.getProduct().getName())
                 .quantity(productQuantity.getQuantity())
                 .unitValue(productQuantity.getUnitValue())
                 .build();
