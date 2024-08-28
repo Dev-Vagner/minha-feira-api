@@ -50,7 +50,6 @@ CREATE TABLE tb_product_quantity (
 	unit_value NUMERIC(12, 2),
 	market_id BIGINT NOT NULL,
 	CONSTRAINT pk_product_quantity_id PRIMARY KEY (id),
-	CONSTRAINT uk_product_market UNIQUE (product_id, market_id),
 	CONSTRAINT fk_product_quantity_product FOREIGN KEY (product_id) REFERENCES tb_product,
 	CONSTRAINT fk_product_quantity_market FOREIGN KEY (market_id) REFERENCES tb_market ON DELETE CASCADE
 );

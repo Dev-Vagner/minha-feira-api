@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Getter
 @Setter
-public class UpdateProductQuantityRequest implements IProductQuantity {
+public class UpdateProductQuantityRequest {
 
     @NotNull(message = "É necessário passar o produto na lista da feira")
     private Long productId;

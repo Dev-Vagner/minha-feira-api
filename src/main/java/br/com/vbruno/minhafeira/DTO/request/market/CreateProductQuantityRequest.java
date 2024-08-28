@@ -10,7 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class CreateProductQuantityRequest implements IProductQuantity {
+public class CreateProductQuantityRequest {
 
     @NotNull(message = "É necessário passar o produto na lista da feira")
     private Long productId;
