@@ -2,6 +2,7 @@ package br.com.vbruno.minhafeira.service.market;
 
 import br.com.vbruno.minhafeira.DTO.request.market.CreateMarketRequest;
 import br.com.vbruno.minhafeira.DTO.request.market.CreateProductQuantityRequest;
+import br.com.vbruno.minhafeira.DTO.request.market.UpdateProductQuantityRequest;
 import br.com.vbruno.minhafeira.DTO.response.IdResponse;
 import br.com.vbruno.minhafeira.domain.Market;
 import br.com.vbruno.minhafeira.domain.Product;
@@ -54,7 +55,15 @@ public class CreateMarketService {
 
         marketRepository.save(market);
 
-        List<ProductQuantity> listProductQuantity = request.getListProductsQuantities().stream()
+        List<ProductQuantity> listProductQuantityValidate = getListValidateProductsQuantities(request.getListProductsQuantities(), idUser, market);
+
+        productQuantityRepository.saveAll(listProductQuantityValidate);
+
+        return IdResponseMapper.toResponse(market.getId());
+    }
+
+    private List<ProductQuantity> getListValidateProductsQuantities(List<CreateProductQuantityRequest> list, Long idUser, Market market) {
+        return list.stream()
                 .map(productQuantity -> {
                     Product product = searchProductFromUserService.byId(productQuantity.getProductId(), idUser);
 
@@ -66,9 +75,5 @@ public class CreateMarketService {
                     return productQuantityValidate;
                 })
                 .toList();
-
-        productQuantityRepository.saveAll(listProductQuantity);
-
-        return IdResponseMapper.toResponse(market.getId());
     }
 }

@@ -51,7 +51,17 @@ public class UpdateMarketService {
 
         marketRepository.save(market);
 
-        List<ProductQuantity> listProductQuantity = request.getListProductsQuantities().stream()
+        List<ProductQuantity> listProductQuantityValidate = getListValidateProductsQuantities(request.getListProductsQuantities(), idUser, market);
+
+        productQuantityRepository.deleteAllByMarketId(market.getId());
+
+        productQuantityRepository.saveAll(listProductQuantityValidate);
+
+        return IdResponseMapper.toResponse(market.getId());
+    }
+
+    private List<ProductQuantity> getListValidateProductsQuantities(List<UpdateProductQuantityRequest> list, Long idUser, Market market) {
+        return list.stream()
                 .map(productQuantity -> {
                     Product product = searchProductFromUserService.byId(productQuantity.getProductId(), idUser);
 
@@ -64,11 +74,5 @@ public class UpdateMarketService {
                     return productQuantityValidate;
                 })
                 .toList();
-
-        productQuantityRepository.deleteAllByMarketId(market.getId());
-
-        productQuantityRepository.saveAll(listProductQuantity);
-
-        return IdResponseMapper.toResponse(market.getId());
     }
 }
