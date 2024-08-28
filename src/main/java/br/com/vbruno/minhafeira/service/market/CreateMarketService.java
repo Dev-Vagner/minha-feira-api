@@ -61,6 +61,7 @@ public class CreateMarketService {
 
         Market market = new Market();
         market.setDateMarket(LocalDate.now());
+        market.setObservation(request.getObservation());
         market.setUser(user);
 
         marketRepository.save(market);

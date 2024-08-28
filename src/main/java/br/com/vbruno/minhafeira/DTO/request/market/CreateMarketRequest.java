@@ -16,7 +16,8 @@ import java.util.List;
 public class CreateMarketRequest {
 
     @NotEmpty(message = "A lista de produtos e quantidades não pode está vazia")
-
     @Valid
     private List<CreateProductQuantityRequest> listProductsQuantities;
+
+    private String observation;
 }

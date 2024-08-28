@@ -9,6 +9,10 @@ public class MarketFactory {
 
     public static CreateMarketRequest getCreateMarketRequest() {
         CreateProductQuantityRequest productQuantity = new CreateProductQuantityRequest(1L, 5);
-        return new CreateMarketRequest(List.of(productQuantity));
+
+        List<CreateProductQuantityRequest> listProductQuantity = List.of(productQuantity);
+        String observation = "Observação teste";
+
+        return new CreateMarketRequest(listProductQuantity, observation);
     }
 }
