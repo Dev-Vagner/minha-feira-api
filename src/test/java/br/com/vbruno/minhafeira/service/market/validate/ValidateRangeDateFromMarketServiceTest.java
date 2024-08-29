@@ -19,8 +19,8 @@ class ValidateRangeDateFromMarketServiceTest {
     @Test
     @DisplayName("Não deve fazer nada quando a data inicial passada for uma data anterior a data final")
     void naoDeveFazerNadaQuandoIntervaloDeDatasCorreto() {
-        LocalDate startDate = LocalDate.of(2024, 8, 25);
-        LocalDate endDate = LocalDate.of(2024, 8, 29);
+        LocalDate startDate = LocalDate.of(2024, 7, 20);
+        LocalDate endDate = LocalDate.of(2024, 8, 20);
 
         tested.validate(startDate, endDate);
     }

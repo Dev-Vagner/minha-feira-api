@@ -47,6 +47,9 @@ class ListMarketServiceTest {
 
         Page<ListMarketResponse> listMarketsReturned = tested.list(idUser, pageable);
 
+        Mockito.verify(searchUserService).byId(idUser);
+        Mockito.verify(marketRepository).findAllByUserId(idUser, pageable);
+
         Assertions.assertEquals(expectedListSize, listMarketsReturned.getSize());
         Assertions.assertEquals(market.getId(), listMarketsReturned.getContent().get(0).getId());
         Assertions.assertEquals(market.getDateMarket(), listMarketsReturned.getContent().get(0).getDateMarket());

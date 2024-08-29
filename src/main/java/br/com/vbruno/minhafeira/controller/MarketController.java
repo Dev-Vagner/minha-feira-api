@@ -14,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @RestController
 @RequestMapping("/markets")
@@ -43,7 +42,7 @@ public class MarketController {
         return listMarketService.list(idUser, pageable);
     }
 
-    @GetMapping("/user/{idUser}")
+    @GetMapping("/byRangeDate/user/{idUser}")
     public Page<ListMarketResponse> listByRangeDate(@PathVariable Long idUser, Pageable pageable,
                                                     @RequestParam(name = "startDate") LocalDate startDate,
                                                     @RequestParam(name = "endDate") LocalDate endDate) {
