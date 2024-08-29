@@ -2,11 +2,10 @@ package br.com.vbruno.minhafeira.controller;
 
 import br.com.vbruno.minhafeira.DTO.request.market.CreateMarketRequest;
 import br.com.vbruno.minhafeira.DTO.request.market.UpdateMarketRequest;
-import br.com.vbruno.minhafeira.DTO.request.product.UpdateProductRequest;
 import br.com.vbruno.minhafeira.DTO.response.IdResponse;
 import br.com.vbruno.minhafeira.DTO.response.market.DetailsMarketResponse;
-import br.com.vbruno.minhafeira.DTO.response.product.DetailsProductResponse;
 import br.com.vbruno.minhafeira.service.market.CreateMarketService;
+import br.com.vbruno.minhafeira.service.market.DeleteMarketService;
 import br.com.vbruno.minhafeira.service.market.DetailsMarketService;
 import br.com.vbruno.minhafeira.service.market.UpdateMarketService;
 import jakarta.validation.Valid;
@@ -27,6 +26,9 @@ public class MarketController {
     @Autowired
     private UpdateMarketService updateMarketService;
 
+    @Autowired
+    private DeleteMarketService deleteMarketService;
+
     @GetMapping("/{idMarket}/user/{idUser}")
     public DetailsMarketResponse details(@PathVariable Long idMarket, @PathVariable Long idUser) {
         return detailsMarketService.details(idMarket, idUser);
@@ -42,5 +44,11 @@ public class MarketController {
     @ResponseStatus(HttpStatus.OK)
     public IdResponse update(@PathVariable Long idMarket, @PathVariable Long idUser, @Valid @RequestBody UpdateMarketRequest request) {
         return updateMarketService.update(idMarket, idUser, request);
+    }
+
+    @DeleteMapping("/{idMarket}/user/{idUser}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long idMarket, @PathVariable Long idUser) {
+        deleteMarketService.delete(idMarket, idUser);
     }
 }
