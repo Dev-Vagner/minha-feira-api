@@ -4,18 +4,23 @@ import br.com.vbruno.minhafeira.DTO.request.market.CreateMarketRequest;
 import br.com.vbruno.minhafeira.DTO.request.market.UpdateMarketRequest;
 import br.com.vbruno.minhafeira.DTO.response.IdResponse;
 import br.com.vbruno.minhafeira.DTO.response.market.DetailsMarketResponse;
-import br.com.vbruno.minhafeira.service.market.CreateMarketService;
-import br.com.vbruno.minhafeira.service.market.DeleteMarketService;
-import br.com.vbruno.minhafeira.service.market.DetailsMarketService;
-import br.com.vbruno.minhafeira.service.market.UpdateMarketService;
+import br.com.vbruno.minhafeira.DTO.response.market.ListMarketResponse;
+import br.com.vbruno.minhafeira.service.market.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/markets")
 public class MarketController {
+
+    @Autowired
+    private ListMarketService listMarketService;
 
     @Autowired
     private DetailsMarketService detailsMarketService;
@@ -28,6 +33,11 @@ public class MarketController {
 
     @Autowired
     private DeleteMarketService deleteMarketService;
+
+    @GetMapping("/user/{idUser}")
+    public Page<ListMarketResponse> list(@PathVariable Long idUser, Pageable pageable) {
+        return listMarketService.list(idUser, pageable);
+    }
 
     @GetMapping("/{idMarket}/user/{idUser}")
     public DetailsMarketResponse details(@PathVariable Long idMarket, @PathVariable Long idUser) {
