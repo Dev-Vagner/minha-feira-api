@@ -48,6 +48,6 @@ class SearchUserServiceTest {
 
         Mockito.verify(userRepository).findById(idUser);
 
-        Assertions.assertEquals("Usuário não cadastrado", exception.getMessage());
+        Assertions.assertEquals("Usuário não encontrado", exception.getMessage());
     }
 }
