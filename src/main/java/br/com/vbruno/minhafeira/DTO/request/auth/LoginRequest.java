@@ -10,7 +10,7 @@ import lombok.Setter;
 public class LoginRequest {
 
     @NotBlank(message = "Preencha o email")
-    @Email(message = "Email inválido")
+    @Email(message = "Digite um formato de email válido")
     private String email;
 
     @NotBlank(message = "Preencha a senha")

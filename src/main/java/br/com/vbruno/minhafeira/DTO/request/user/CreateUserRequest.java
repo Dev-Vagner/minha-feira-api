@@ -19,6 +19,6 @@ public class CreateUserRequest {
     private String email;
 
     @NotBlank(message = "A senha do usuário não pode estar em branco")
-    @Size(min = 3, max = 50, message = "A senha do usuário deve ter entre 3 e 50 caracteres")
+    @Size(min = 5, message = "A senha do usuário deve ter pelo menos 5 caracteres")
     private String password;
 }

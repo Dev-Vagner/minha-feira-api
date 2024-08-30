@@ -2,6 +2,7 @@ package br.com.vbruno.minhafeira.mapper.user;
 
 import br.com.vbruno.minhafeira.DTO.request.user.CreateUserRequest;
 import br.com.vbruno.minhafeira.domain.User;
+import br.com.vbruno.minhafeira.domain.UserRole;
 
 public class CreateUserMapper {
 
@@ -9,7 +10,7 @@ public class CreateUserMapper {
         return User.builder()
                 .name(request.getName())
                 .email(request.getEmail())
-                .password(request.getPassword())
+                .role(UserRole.USER)
                 .build();
     }
 }

@@ -1,4 +1,4 @@
-package br.com.vbruno.minhafeira.service.auth;
+package br.com.vbruno.minhafeira.infra.security;
 
 import br.com.vbruno.minhafeira.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

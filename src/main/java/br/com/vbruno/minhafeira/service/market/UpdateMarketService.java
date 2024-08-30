@@ -51,11 +51,11 @@ public class UpdateMarketService {
 
         marketRepository.save(market);
 
-        List<ProductQuantity> listProductQuantityValidate = getListValidateProductsQuantities(request.getListProductsQuantities(), idUser, market);
+        List<ProductQuantity> listProductsQuantitiesValidate = getListValidateProductsQuantities(request.getListProductsQuantities(), idUser, market);
 
         productQuantityRepository.deleteAllByMarketId(market.getId());
 
-        productQuantityRepository.saveAll(listProductQuantityValidate);
+        productQuantityRepository.saveAll(listProductsQuantitiesValidate);
 
         return IdResponseMapper.toResponse(market.getId());
     }

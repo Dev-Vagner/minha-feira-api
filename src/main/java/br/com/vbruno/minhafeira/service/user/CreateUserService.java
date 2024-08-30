@@ -8,6 +8,7 @@ import br.com.vbruno.minhafeira.mapper.user.CreateUserMapper;
 import br.com.vbruno.minhafeira.repository.UserRepository;
 import br.com.vbruno.minhafeira.service.user.validate.ValidateUniqueEmailUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +26,10 @@ public class CreateUserService {
         validateUniqueEmailUserService.validate(request.getEmail());
 
         User user = CreateUserMapper.toEntity(request);
+
+        String encryptedPassword = new BCryptPasswordEncoder().encode(request.getPassword());
+        user.setPassword(encryptedPassword);
+
         userRepository.save(user);
 
         return IdResponseMapper.toResponse(user.getId());
