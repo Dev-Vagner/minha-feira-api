@@ -15,6 +15,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 @ExtendWith(MockitoExtension.class)
 class SearchCategoryFromUserServiceTest {
 
@@ -30,13 +35,13 @@ class SearchCategoryFromUserServiceTest {
         Category category = CategoryFactory.getCategory();
         Long idUser = 1L;
 
-        Mockito.when(categoryRepository.findByIdAndUserId(category.getId(), idUser)).thenReturn(Optional.of(category));
+        when(categoryRepository.findByIdAndUserId(category.getId(), idUser)).thenReturn(Optional.of(category));
 
         Category categoryReturned = tested.byId(category.getId(), idUser);
 
-        Mockito.verify(categoryRepository).findByIdAndUserId(category.getId(), idUser);
+        verify(categoryRepository).findByIdAndUserId(category.getId(), idUser);
 
-        Assertions.assertEquals(category, categoryReturned);
+        assertEquals(category, categoryReturned);
     }
 
     @Test
@@ -46,10 +51,10 @@ class SearchCategoryFromUserServiceTest {
         Long idUser = 2L;
 
         CategoryInvalidException exception =
-                Assertions.assertThrows(CategoryInvalidException.class, () -> tested.byId(idCategory, idUser));
+                assertThrows(CategoryInvalidException.class, () -> tested.byId(idCategory, idUser));
 
-        Mockito.verify(categoryRepository).findByIdAndUserId(idCategory, idUser);
+        verify(categoryRepository).findByIdAndUserId(idCategory, idUser);
 
-        Assertions.assertEquals("Categoria inválida", exception.getMessage());
+        assertEquals("Categoria inválida", exception.getMessage());
     }
 }

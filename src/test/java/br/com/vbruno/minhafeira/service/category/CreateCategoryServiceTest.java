@@ -18,8 +18,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class CreateCategoryServiceTest {
@@ -65,12 +66,12 @@ class CreateCategoryServiceTest {
 
         IdResponse idResponse = tested.register(createCategoryRequest);
 
-        Mockito.verify(validateUniqueCategoryFromUserService).validate(createCategoryRequest.getName(), user.getId());
-        Mockito.verify(categoryRepository).save(categoryCaptor.capture());
+        verify(validateUniqueCategoryFromUserService).validate(createCategoryRequest.getName(), user.getId());
+        verify(categoryRepository).save(categoryCaptor.capture());
 
         Category category = categoryCaptor.getValue();
 
-        Assertions.assertEquals(category.getId(), idResponse.getId());
+        assertEquals(category.getId(), idResponse.getId());
     }
 
     @Test
@@ -85,12 +86,12 @@ class CreateCategoryServiceTest {
         when(securityContext.getAuthentication()).thenReturn(authentication);
         when(authentication.getPrincipal()).thenReturn(user);
 
-        Mockito.doThrow(CategoryRegisteredException.class)
+        doThrow(CategoryRegisteredException.class)
                 .when(validateUniqueCategoryFromUserService).validate(createCategoryRequest.getName(), user.getId());
 
-        Assertions.assertThrows(CategoryRegisteredException.class, () -> tested.register(createCategoryRequest));
+        assertThrows(CategoryRegisteredException.class, () -> tested.register(createCategoryRequest));
 
-        Mockito.verify(validateUniqueCategoryFromUserService).validate(createCategoryRequest.getName(), user.getId());
-        Mockito.verify(categoryRepository, Mockito.never()).save(categoryCaptor.capture());
+        verify(validateUniqueCategoryFromUserService).validate(createCategoryRequest.getName(), user.getId());
+        verify(categoryRepository, never()).save(categoryCaptor.capture());
     }
 }

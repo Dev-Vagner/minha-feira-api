@@ -15,8 +15,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class UpdateUserServiceTest {
@@ -60,12 +61,12 @@ class UpdateUserServiceTest {
 
         IdResponse idResponse = tested.update(updateUserRequest);
 
-        Mockito.verify(validateUniqueEmailUserService).validate(updateUserRequest.getEmail());
-        Mockito.verify(userRepository).save(userCaptor.capture());
+        verify(validateUniqueEmailUserService).validate(updateUserRequest.getEmail());
+        verify(userRepository).save(userCaptor.capture());
 
         User userSaved = userCaptor.getValue();
 
-        Assertions.assertEquals(userSaved.getId(), idResponse.getId());
+        assertEquals(userSaved.getId(), idResponse.getId());
     }
 
     @Test
@@ -81,12 +82,12 @@ class UpdateUserServiceTest {
         when(securityContext.getAuthentication()).thenReturn(authentication);
         when(authentication.getPrincipal()).thenReturn(user);
 
-        Mockito.doThrow(EmailRegisteredException.class)
+        doThrow(EmailRegisteredException.class)
                 .when(validateUniqueEmailUserService).validate(updateUserRequest.getEmail());
 
-        Assertions.assertThrows(EmailRegisteredException.class, () -> tested.update(updateUserRequest));
+        assertThrows(EmailRegisteredException.class, () -> tested.update(updateUserRequest));
 
-        Mockito.verify(validateUniqueEmailUserService).validate(updateUserRequest.getEmail());
-        Mockito.verify(userRepository, Mockito.never()).save(userCaptor.capture());
+        verify(validateUniqueEmailUserService).validate(updateUserRequest.getEmail());
+        verify(userRepository, never()).save(userCaptor.capture());
     }
 }

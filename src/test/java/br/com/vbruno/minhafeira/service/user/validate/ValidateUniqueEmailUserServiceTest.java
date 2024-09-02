@@ -8,8 +8,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class ValidateUniqueEmailUserServiceTest {
@@ -25,11 +29,11 @@ class ValidateUniqueEmailUserServiceTest {
     void naoDeveFazerNadaQuandoEmailForUnico() {
 
         String email = "teste@email.com";
-        Mockito.when(userRepository.existsByEmail(email)).thenReturn(false);
+        when(userRepository.existsByEmail(email)).thenReturn(false);
 
         tested.validate(email);
 
-        Mockito.verify(userRepository).existsByEmail(email);
+        verify(userRepository).existsByEmail(email);
     }
 
     @Test
@@ -37,13 +41,13 @@ class ValidateUniqueEmailUserServiceTest {
     void deveRetornarErroQuandoEmailJaTiverCadastrado() {
 
         String email = "teste@email.com";
-        Mockito.when(userRepository.existsByEmail(email)).thenReturn(true);
+        when(userRepository.existsByEmail(email)).thenReturn(true);
 
         EmailRegisteredException exception =
-                Assertions.assertThrows(EmailRegisteredException.class, () -> tested.validate(email));
+                assertThrows(EmailRegisteredException.class, () -> tested.validate(email));
 
-        Mockito.verify(userRepository).existsByEmail(email);
+        verify(userRepository).existsByEmail(email);
 
-        Assertions.assertEquals("Este email já está cadastrado", exception.getMessage());
+        assertEquals("Este email já está cadastrado", exception.getMessage());
     }
 }

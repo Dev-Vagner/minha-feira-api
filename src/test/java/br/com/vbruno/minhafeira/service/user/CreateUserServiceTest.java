@@ -7,12 +7,15 @@ import br.com.vbruno.minhafeira.exception.EmailRegisteredException;
 import br.com.vbruno.minhafeira.factory.UserFactory;
 import br.com.vbruno.minhafeira.repository.UserRepository;
 import br.com.vbruno.minhafeira.service.user.validate.ValidateUniqueEmailUserService;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class CreateUserServiceTest {
@@ -36,12 +39,12 @@ class CreateUserServiceTest {
 
         IdResponse idResponse = tested.register(createUserRequest);
 
-        Mockito.verify(validateUniqueEmailUserService).validate(createUserRequest.getEmail());
-        Mockito.verify(userRepository).save(userCaptor.capture());
+        verify(validateUniqueEmailUserService).validate(createUserRequest.getEmail());
+        verify(userRepository).save(userCaptor.capture());
 
         User user = userCaptor.getValue();
 
-        Assertions.assertEquals(user.getId(), idResponse.getId());
+        assertEquals(user.getId(), idResponse.getId());
     }
 
     @Test
@@ -49,12 +52,12 @@ class CreateUserServiceTest {
     void deveRetornarErroQuandoEmailJaForCadastrado() {
         CreateUserRequest createUserRequest = UserFactory.getCreateUserRequest();
 
-        Mockito.doThrow(EmailRegisteredException.class)
+        doThrow(EmailRegisteredException.class)
                 .when(validateUniqueEmailUserService).validate(createUserRequest.getEmail());
 
-        Assertions.assertThrows(EmailRegisteredException.class, () -> tested.register(createUserRequest));
+        assertThrows(EmailRegisteredException.class, () -> tested.register(createUserRequest));
 
-        Mockito.verify(validateUniqueEmailUserService).validate(createUserRequest.getEmail());
-        Mockito.verify(userRepository, Mockito.never()).save(userCaptor.capture());
+        verify(validateUniqueEmailUserService).validate(createUserRequest.getEmail());
+        verify(userRepository, never()).save(userCaptor.capture());
     }
 }

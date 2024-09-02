@@ -3,11 +3,14 @@ package br.com.vbruno.minhafeira.service.category;
 import br.com.vbruno.minhafeira.DTO.request.category.UpdateCategoryRequest;
 import br.com.vbruno.minhafeira.DTO.response.IdResponse;
 import br.com.vbruno.minhafeira.domain.Category;
+import br.com.vbruno.minhafeira.domain.User;
 import br.com.vbruno.minhafeira.mapper.IdResponseMapper;
 import br.com.vbruno.minhafeira.repository.CategoryRepository;
 import br.com.vbruno.minhafeira.service.category.search.SearchCategoryFromUserService;
 import br.com.vbruno.minhafeira.service.category.validate.ValidateUniqueCategoryFromUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,11 +29,14 @@ public class UpdateCategoryService {
     private CategoryRepository categoryRepository;
 
     @Transactional
-    public IdResponse update(Long idCategory, Long idUser, UpdateCategoryRequest request) {
-        Category category = searchCategoryFromUserService.byId(idCategory, idUser);
+    public IdResponse update(Long idCategory, UpdateCategoryRequest request) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+
+        Category category = searchCategoryFromUserService.byId(idCategory, user.getId());
 
         if(!Objects.equals(request.getName(), category.getName())) {
-            validateUniqueCategoryFromUserService.validate(request.getName(), idUser);
+            validateUniqueCategoryFromUserService.validate(request.getName(), user.getId());
         }
 
         category.setName(request.getName());

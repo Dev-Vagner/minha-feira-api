@@ -48,10 +48,10 @@ public class CategoryController {
         return createCategoryService.register(request);
     }
 
-    @PutMapping("/{idCategory}/user/{idUser}")
+    @PutMapping("/{idCategory}")
     @ResponseStatus(HttpStatus.OK)
-    public IdResponse update(@PathVariable Long idCategory, @PathVariable Long idUser, @Valid @RequestBody UpdateCategoryRequest request) {
-        return updateCategoryService.update(idCategory, idUser, request);
+    public IdResponse update(@PathVariable Long idCategory, @Valid @RequestBody UpdateCategoryRequest request) {
+        return updateCategoryService.update(idCategory, request);
     }
 
     @DeleteMapping("/{idCategory}/user/{idUser}")

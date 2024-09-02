@@ -11,8 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class DeleteUserServiceTest {
@@ -48,6 +47,6 @@ class DeleteUserServiceTest {
 
         tested.delete();
 
-        Mockito.verify(userRepository).deleteById(user.getId());
+        verify(userRepository).deleteById(user.getId());
     }
 }

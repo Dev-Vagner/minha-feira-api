@@ -4,16 +4,19 @@ import br.com.vbruno.minhafeira.domain.User;
 import br.com.vbruno.minhafeira.exception.UserNotRegisteredException;
 import br.com.vbruno.minhafeira.factory.UserFactory;
 import br.com.vbruno.minhafeira.repository.UserRepository;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class SearchUserServiceTest {
@@ -29,13 +32,13 @@ class SearchUserServiceTest {
     void deveRetornarUsuarioQuandoIdValido() {
         User user = UserFactory.getUser();
 
-        Mockito.when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
+        when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
 
         User userReturned = tested.byId(user.getId());
 
-        Mockito.verify(userRepository).findById(user.getId());
+        verify(userRepository).findById(user.getId());
 
-        Assertions.assertEquals(user, userReturned);
+        assertEquals(user, userReturned);
     }
 
     @Test
@@ -44,10 +47,10 @@ class SearchUserServiceTest {
         Long idUser = 1L;
 
         UserNotRegisteredException exception =
-                    Assertions.assertThrows(UserNotRegisteredException.class, () -> tested.byId(idUser));
+                    assertThrows(UserNotRegisteredException.class, () -> tested.byId(idUser));
 
-        Mockito.verify(userRepository).findById(idUser);
+        verify(userRepository).findById(idUser);
 
-        Assertions.assertEquals("Usuário não encontrado", exception.getMessage());
+        assertEquals("Usuário não encontrado", exception.getMessage());
     }
 }

@@ -2,14 +2,17 @@ package br.com.vbruno.minhafeira.service.category.validate;
 
 import br.com.vbruno.minhafeira.exception.CategoryRegisteredException;
 import br.com.vbruno.minhafeira.repository.CategoryRepository;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class ValidateUniqueCategoryFromUserServiceTest {
@@ -27,11 +30,11 @@ class ValidateUniqueCategoryFromUserServiceTest {
         String nameCategory = "Categoria teste";
         Long idUser = 1L;
 
-        Mockito.when(categoryRepository.existsByNameIgnoreCaseAndUserId(nameCategory, idUser)).thenReturn(false);
+        when(categoryRepository.existsByNameIgnoreCaseAndUserId(nameCategory, idUser)).thenReturn(false);
 
         tested.validate(nameCategory, idUser);
 
-        Mockito.verify(categoryRepository).existsByNameIgnoreCaseAndUserId(nameCategory, idUser);
+        verify(categoryRepository).existsByNameIgnoreCaseAndUserId(nameCategory, idUser);
     }
 
     @Test
@@ -40,13 +43,13 @@ class ValidateUniqueCategoryFromUserServiceTest {
         String nameCategory = "Categoria teste";
         Long idUser = 1L;
 
-        Mockito.when(categoryRepository.existsByNameIgnoreCaseAndUserId(nameCategory, idUser)).thenReturn(true);
+        when(categoryRepository.existsByNameIgnoreCaseAndUserId(nameCategory, idUser)).thenReturn(true);
 
         CategoryRegisteredException exception =
-                Assertions.assertThrows(CategoryRegisteredException.class, () -> tested.validate(nameCategory, idUser));
+                assertThrows(CategoryRegisteredException.class, () -> tested.validate(nameCategory, idUser));
 
-        Mockito.verify(categoryRepository).existsByNameIgnoreCaseAndUserId(nameCategory, idUser);
+        verify(categoryRepository).existsByNameIgnoreCaseAndUserId(nameCategory, idUser);
 
-        Assertions.assertEquals("Esta categoria já está cadastrada", exception.getMessage());
+        assertEquals("Esta categoria já está cadastrada", exception.getMessage());
     }
 }

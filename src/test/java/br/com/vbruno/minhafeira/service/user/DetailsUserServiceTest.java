@@ -13,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -47,8 +48,8 @@ class DetailsUserServiceTest {
 
         DetailsUserResponse detailsUserResponse = tested.details();
 
-        Assertions.assertEquals(user.getId(), detailsUserResponse.getId());
-        Assertions.assertEquals(user.getName(), detailsUserResponse.getName());
-        Assertions.assertEquals(user.getEmail(), detailsUserResponse.getEmail());
+        assertEquals(user.getId(), detailsUserResponse.getId());
+        assertEquals(user.getName(), detailsUserResponse.getName());
+        assertEquals(user.getEmail(), detailsUserResponse.getEmail());
     }
 }
