@@ -32,9 +32,9 @@ public class CategoryController {
     @Autowired
     private DeleteCategoryService deleteCategoryService;
 
-    @GetMapping("/user/{idUser}")
-    public List<ListCategoryResponse> list(@PathVariable Long idUser) {
-        return listCategoryService.list(idUser);
+    @GetMapping
+    public List<ListCategoryResponse> list() {
+        return listCategoryService.list();
     }
 
     @GetMapping("/{idCategory}")
@@ -54,9 +54,9 @@ public class CategoryController {
         return updateCategoryService.update(idCategory, request);
     }
 
-    @DeleteMapping("/{idCategory}/user/{idUser}")
+    @DeleteMapping("/{idCategory}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Long idCategory, @PathVariable Long idUser) {
-        deleteCategoryService.delete(idCategory, idUser);
+    public void delete(@PathVariable Long idCategory) {
+        deleteCategoryService.delete(idCategory);
     }
 }

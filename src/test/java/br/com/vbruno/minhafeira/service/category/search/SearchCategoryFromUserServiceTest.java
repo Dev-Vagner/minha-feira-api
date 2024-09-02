@@ -4,13 +4,11 @@ import br.com.vbruno.minhafeira.domain.Category;
 import br.com.vbruno.minhafeira.exception.CategoryInvalidException;
 import br.com.vbruno.minhafeira.factory.CategoryFactory;
 import br.com.vbruno.minhafeira.repository.CategoryRepository;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
