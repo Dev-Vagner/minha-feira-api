@@ -7,7 +7,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.InsufficientAuthenticationException;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -189,8 +190,13 @@ public class AdviceController {
         return new ResponseEntity<>(errorResponse, status);
     }
 
+    @ExceptionHandler(UsernameNotFoundException.class)
+    @ResponseStatus(UNAUTHORIZED)
+    public void handleUsernameNotFoundException(UsernameNotFoundException ex, HttpServletRequest request) {
+    }
+
     @ExceptionHandler(BadCredentialsException.class)
-    @ResponseStatus(FORBIDDEN)
+    @ResponseStatus(UNAUTHORIZED)
     public void handleBadCredentialsException(BadCredentialsException ex, HttpServletRequest request) {
     }
 
