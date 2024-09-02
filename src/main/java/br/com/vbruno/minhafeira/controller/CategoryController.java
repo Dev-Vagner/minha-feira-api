@@ -42,10 +42,10 @@ public class CategoryController {
         return detailsCategoryService.details(idCategory, idUser);
     }
 
-    @PostMapping("/user/{idUser}")
+    @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public IdResponse register(@PathVariable Long idUser, @Valid @RequestBody CreateCategoryRequest request) {
-        return createCategoryService.register(idUser, request);
+    public IdResponse register(@Valid @RequestBody CreateCategoryRequest request) {
+        return createCategoryService.register(request);
     }
 
     @PutMapping("/{idCategory}/user/{idUser}")

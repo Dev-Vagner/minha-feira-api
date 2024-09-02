@@ -9,6 +9,8 @@ import br.com.vbruno.minhafeira.repository.CategoryRepository;
 import br.com.vbruno.minhafeira.service.category.validate.ValidateUniqueCategoryFromUserService;
 import br.com.vbruno.minhafeira.service.user.search.SearchUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,16 +21,14 @@ public class CreateCategoryService {
     private ValidateUniqueCategoryFromUserService validateUniqueCategoryFromUserService;
 
     @Autowired
-    private SearchUserService searchUserService;
-
-    @Autowired
     private CategoryRepository categoryRepository;
 
     @Transactional
-    public IdResponse register(Long idUser, CreateCategoryRequest request) {
-        User user = searchUserService.byId(idUser);
+    public IdResponse register(CreateCategoryRequest request) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
 
-        validateUniqueCategoryFromUserService.validate(request.getName(), idUser);
+        validateUniqueCategoryFromUserService.validate(request.getName(), user.getId());
 
         Category category = new Category();
         category.setName(request.getName());
