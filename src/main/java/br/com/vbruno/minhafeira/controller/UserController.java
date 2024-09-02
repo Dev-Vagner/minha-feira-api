@@ -40,10 +40,10 @@ public class UserController {
         return createUserService.register(request);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping
     @ResponseStatus(HttpStatus.OK)
-    public IdResponse update(@PathVariable Long id, @Valid @RequestBody UpdateUserRequest request) {
-        return updateUserService.update(id, request);
+    public IdResponse update(@Valid @RequestBody UpdateUserRequest request) {
+        return updateUserService.update(request);
     }
 
     @DeleteMapping("/{id}")

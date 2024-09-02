@@ -8,6 +8,8 @@ import br.com.vbruno.minhafeira.repository.UserRepository;
 import br.com.vbruno.minhafeira.service.user.search.SearchUserService;
 import br.com.vbruno.minhafeira.service.user.validate.ValidateUniqueEmailUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,14 +22,12 @@ public class UpdateUserService {
     private ValidateUniqueEmailUserService validateUniqueEmailUserService;
 
     @Autowired
-    private SearchUserService searchUserService;
-
-    @Autowired
     private UserRepository userRepository;
 
     @Transactional
-    public IdResponse update(Long id, UpdateUserRequest request) {
-        User user = searchUserService.byId(id);
+    public IdResponse update(UpdateUserRequest request) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
 
         if(!Objects.equals(request.getEmail(), user.getEmail())) {
             validateUniqueEmailUserService.validate(request.getEmail());
