@@ -1,8 +1,10 @@
 package br.com.vbruno.minhafeira.service.user;
 
+import br.com.vbruno.minhafeira.domain.User;
 import br.com.vbruno.minhafeira.repository.UserRepository;
-import br.com.vbruno.minhafeira.service.user.search.SearchUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,15 +12,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class DeleteUserService {
 
     @Autowired
-    private SearchUserService searchUserService;
-
-    @Autowired
     private UserRepository userRepository;
 
     @Transactional
-    public void delete(Long id) {
-        searchUserService.byId(id);
+    public void delete() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
 
-        userRepository.deleteById(id);
+        userRepository.deleteById(user.getId());
     }
 }

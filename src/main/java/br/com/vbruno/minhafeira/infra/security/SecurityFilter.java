@@ -1,5 +1,8 @@
 package br.com.vbruno.minhafeira.infra.security;
 
+import br.com.vbruno.minhafeira.domain.User;
+import br.com.vbruno.minhafeira.exception.MarketInvalidException;
+import br.com.vbruno.minhafeira.exception.UserNotRegisteredException;
 import br.com.vbruno.minhafeira.repository.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -27,8 +30,9 @@ public class SecurityFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = this.recoverToken(request);
         if(token != null) {
-            String email = tokenService.validateToken(token);
-            UserDetails user = userRepository.findByEmail(email);
+            String id = tokenService.validateToken(token);
+            User user = userRepository.findById(Long.valueOf(id))
+                    .orElseThrow(() -> new UserNotRegisteredException("Usuário não encontrado"));
 
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);

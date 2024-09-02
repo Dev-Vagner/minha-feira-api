@@ -3,18 +3,16 @@ package br.com.vbruno.minhafeira.service.user;
 import br.com.vbruno.minhafeira.DTO.response.user.DetailsUserResponse;
 import br.com.vbruno.minhafeira.domain.User;
 import br.com.vbruno.minhafeira.mapper.user.DetailsUserMapper;
-import br.com.vbruno.minhafeira.service.user.search.SearchUserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class DetailsUserService {
 
-    @Autowired
-    private SearchUserService searchUserService;
-
-    public DetailsUserResponse details(Long id) {
-        User user = searchUserService.byId(id);
+    public DetailsUserResponse details() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
 
         return DetailsUserMapper.toResponse(user);
     }

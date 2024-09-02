@@ -29,9 +29,9 @@ public class UserController {
     @Autowired
     private DeleteUserService deleteUserService;
 
-    @GetMapping("/{id}")
-    public DetailsUserResponse details(@PathVariable Long id) {
-        return detailsUserService.details(id);
+    @GetMapping("/details")
+    public DetailsUserResponse details() {
+        return detailsUserService.details();
     }
 
     @PostMapping
@@ -46,9 +46,9 @@ public class UserController {
         return updateUserService.update(request);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping()
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Long id) {
-        deleteUserService.delete(id);
+    public void delete() {
+        deleteUserService.delete();
     }
 }
