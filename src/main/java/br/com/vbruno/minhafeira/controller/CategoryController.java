@@ -37,9 +37,9 @@ public class CategoryController {
         return listCategoryService.list(idUser);
     }
 
-    @GetMapping("/{idCategory}/user/{idUser}")
-    public DetailsCategoryResponse details(@PathVariable Long idCategory, @PathVariable Long idUser) {
-        return detailsCategoryService.details(idCategory, idUser);
+    @GetMapping("/{idCategory}")
+    public DetailsCategoryResponse details(@PathVariable Long idCategory) {
+        return detailsCategoryService.details(idCategory);
     }
 
     @PostMapping()
