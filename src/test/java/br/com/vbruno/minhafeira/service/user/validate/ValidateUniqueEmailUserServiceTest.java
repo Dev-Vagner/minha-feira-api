@@ -2,7 +2,6 @@ package br.com.vbruno.minhafeira.service.user.validate;
 
 import br.com.vbruno.minhafeira.exception.EmailRegisteredException;
 import br.com.vbruno.minhafeira.repository.UserRepository;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
