@@ -1,16 +1,23 @@
 package br.com.vbruno.minhafeira.service.product;
 
 import br.com.vbruno.minhafeira.domain.Product;
+import br.com.vbruno.minhafeira.domain.User;
 import br.com.vbruno.minhafeira.exception.ProductInvalidException;
 import br.com.vbruno.minhafeira.factory.ProductFactory;
+import br.com.vbruno.minhafeira.factory.UserFactory;
 import br.com.vbruno.minhafeira.repository.ProductRepository;
 import br.com.vbruno.minhafeira.service.product.search.SearchProductFromUserService;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class DeleteProductServiceTest {
@@ -27,23 +34,40 @@ class DeleteProductServiceTest {
     @Captor
     private ArgumentCaptor<Product> productCaptor;
 
+    private MockedStatic<SecurityContextHolder> securityContextHolderMock;
+
+    @BeforeEach
+    void beforeTests() {
+        securityContextHolderMock = Mockito.mockStatic(SecurityContextHolder.class);
+    }
+
+    @AfterEach
+    void afterTests() {
+        securityContextHolderMock.close();
+    }
+
     @Test
     @DisplayName("Deve setar produto como inativo com sucesso")
     void deveInativarProduto() {
         Product product = ProductFactory.getProductWithCategory();
         Long idProduct = 1L;
-        Long idUser = 2L;
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
+        User user = UserFactory.getUser();
 
-        Mockito.when(searchProductFromUserService.byId(idProduct, idUser)).thenReturn(product);
+        when(SecurityContextHolder.getContext()).thenReturn(securityContext);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getPrincipal()).thenReturn(user);
+        when(searchProductFromUserService.byId(idProduct, user.getId())).thenReturn(product);
 
-        tested.delete(idProduct, idUser);
+        tested.delete(idProduct);
 
-        Mockito.verify(searchProductFromUserService).byId(idProduct, idUser);
-        Mockito.verify(productRepository).save(productCaptor.capture());
+        verify(searchProductFromUserService).byId(idProduct, user.getId());
+        verify(productRepository).save(productCaptor.capture());
 
         Product productInactive = productCaptor.getValue();
 
-        Assertions.assertFalse(productInactive.isActive());
+        assertFalse(productInactive.isActive());
     }
 
     @Test
@@ -51,14 +75,20 @@ class DeleteProductServiceTest {
     void deveRetornarErroQuandoIdProdutoInvalido() {
         Product product = ProductFactory.getProductWithCategory();
         Long idProduct = 1L;
-        Long idUser = 2L;
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
+        User user = UserFactory.getUser();
 
-        Mockito.doThrow(ProductInvalidException.class)
-                .when(searchProductFromUserService).byId(idProduct, idUser);
+        when(SecurityContextHolder.getContext()).thenReturn(securityContext);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getPrincipal()).thenReturn(user);
 
-        Assertions.assertThrows(ProductInvalidException.class, () -> tested.delete(idProduct, idUser));
+        doThrow(ProductInvalidException.class)
+                .when(searchProductFromUserService).byId(idProduct, user.getId());
 
-        Mockito.verify(searchProductFromUserService).byId(idProduct, idUser);
-        Mockito.verify(productRepository, Mockito.never()).save(product);
+        assertThrows(ProductInvalidException.class, () -> tested.delete(idProduct));
+
+        verify(searchProductFromUserService).byId(idProduct, user.getId());
+        verify(productRepository, never()).save(product);
     }
 }

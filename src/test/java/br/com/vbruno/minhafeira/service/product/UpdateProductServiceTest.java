@@ -4,21 +4,27 @@ import br.com.vbruno.minhafeira.DTO.request.product.UpdateProductRequest;
 import br.com.vbruno.minhafeira.DTO.response.IdResponse;
 import br.com.vbruno.minhafeira.domain.Category;
 import br.com.vbruno.minhafeira.domain.Product;
+import br.com.vbruno.minhafeira.domain.User;
 import br.com.vbruno.minhafeira.exception.CategoryInvalidException;
 import br.com.vbruno.minhafeira.exception.ProductInvalidException;
 import br.com.vbruno.minhafeira.exception.ProductRegisteredException;
 import br.com.vbruno.minhafeira.factory.CategoryFactory;
 import br.com.vbruno.minhafeira.factory.ProductFactory;
+import br.com.vbruno.minhafeira.factory.UserFactory;
 import br.com.vbruno.minhafeira.repository.ProductRepository;
 import br.com.vbruno.minhafeira.service.category.search.SearchCategoryFromUserService;
 import br.com.vbruno.minhafeira.service.product.search.SearchProductFromUserService;
 import br.com.vbruno.minhafeira.service.product.validate.ValidateUniqueProductFromUserService;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class UpdateProductServiceTest {
@@ -41,6 +47,18 @@ class UpdateProductServiceTest {
     @Captor
     private ArgumentCaptor<Product> productCaptor;
 
+    private MockedStatic<SecurityContextHolder> securityContextHolderMock;
+
+    @BeforeEach
+    void beforeTests() {
+        securityContextHolderMock = Mockito.mockStatic(SecurityContextHolder.class);
+    }
+
+    @AfterEach
+    void afterTests() {
+        securityContextHolderMock.close();
+    }
+
     @Test
     @DisplayName("Deve editar os dados do produto com sucesso quando for passado categoria")
     void deveEditarDadosProdutoComCategoria() {
@@ -48,23 +66,28 @@ class UpdateProductServiceTest {
         Product product = ProductFactory.getProductWithCategory();
         Category category = CategoryFactory.getCategory();
         Long idProduct = 1L;
-        Long idUser = 2L;
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
+        User user = UserFactory.getUser();
 
-        Mockito.when(searchProductFromUserService.byId(idProduct, idUser)).thenReturn(product);
-        Mockito.when(searchCategoryFromUserService.byId(updateProductRequest.getCategoryId(), idUser)).thenReturn(category);
+        when(SecurityContextHolder.getContext()).thenReturn(securityContext);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getPrincipal()).thenReturn(user);
+        when(searchProductFromUserService.byId(idProduct, user.getId())).thenReturn(product);
+        when(searchCategoryFromUserService.byId(updateProductRequest.getCategoryId(), user.getId())).thenReturn(category);
 
-        IdResponse idResponse = tested.update(idProduct, idUser, updateProductRequest);
+        IdResponse idResponse = tested.update(idProduct, updateProductRequest);
 
-        Mockito.verify(searchProductFromUserService).byId(idProduct, idUser);
-        Mockito.verify(validateUniqueProductFromUserService).validate(updateProductRequest.getName(), idUser);
-        Mockito.verify(searchCategoryFromUserService).byId(updateProductRequest.getCategoryId(), idUser);
-        Mockito.verify(productRepository).save(productCaptor.capture());
+        verify(searchProductFromUserService).byId(idProduct, user.getId());
+        verify(validateUniqueProductFromUserService).validate(updateProductRequest.getName(), user.getId());
+        verify(searchCategoryFromUserService).byId(updateProductRequest.getCategoryId(), user.getId());
+        verify(productRepository).save(productCaptor.capture());
 
         Product productUpdate = productCaptor.getValue();
 
-        Assertions.assertEquals(productUpdate.getId(), idResponse.getId());
-        Assertions.assertEquals(category, productUpdate.getCategory());
-        Assertions.assertEquals(updateProductRequest.getName(), productUpdate.getName());
+        assertEquals(productUpdate.getId(), idResponse.getId());
+        assertEquals(category, productUpdate.getCategory());
+        assertEquals(updateProductRequest.getName(), productUpdate.getName());
     }
 
     @Test
@@ -73,22 +96,27 @@ class UpdateProductServiceTest {
         UpdateProductRequest updateProductRequest = ProductFactory.getUpdateProductRequestNotCategory();
         Product product = ProductFactory.getProductWithCategory();
         Long idProduct = 1L;
-        Long idUser = 2L;
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
+        User user = UserFactory.getUser();
 
-        Mockito.when(searchProductFromUserService.byId(idProduct, idUser)).thenReturn(product);
+        when(SecurityContextHolder.getContext()).thenReturn(securityContext);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getPrincipal()).thenReturn(user);
+        when(searchProductFromUserService.byId(idProduct, user.getId())).thenReturn(product);
 
-        IdResponse idResponse = tested.update(idProduct, idUser, updateProductRequest);
+        IdResponse idResponse = tested.update(idProduct, updateProductRequest);
 
-        Mockito.verify(searchProductFromUserService).byId(idProduct, idUser);
-        Mockito.verify(validateUniqueProductFromUserService).validate(updateProductRequest.getName(), idUser);
-        Mockito.verify(searchCategoryFromUserService, Mockito.never()).byId(updateProductRequest.getCategoryId(), idUser);
-        Mockito.verify(productRepository).save(productCaptor.capture());
+        verify(searchProductFromUserService).byId(idProduct, user.getId());
+        verify(validateUniqueProductFromUserService).validate(updateProductRequest.getName(), user.getId());
+        verify(searchCategoryFromUserService, never()).byId(updateProductRequest.getCategoryId(), user.getId());
+        verify(productRepository).save(productCaptor.capture());
 
         Product productSaved = productCaptor.getValue();
 
-        Assertions.assertEquals(productSaved.getId(), idResponse.getId());
-        Assertions.assertNull(productSaved.getCategory());
-        Assertions.assertEquals(updateProductRequest.getName(), productSaved.getName());
+        assertEquals(productSaved.getId(), idResponse.getId());
+        assertNull(productSaved.getCategory());
+        assertEquals(updateProductRequest.getName(), productSaved.getName());
     }
 
     @Test
@@ -97,17 +125,23 @@ class UpdateProductServiceTest {
         UpdateProductRequest updateProductRequest = ProductFactory.getUpdateProductRequestNotCategory();
         Long idProduct = 1L;
         Long idCategory = 2L;
-        Long idUser = 3L;
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
+        User user = UserFactory.getUser();
 
-        Mockito.doThrow(ProductInvalidException.class)
-                .when(searchProductFromUserService).byId(idProduct, idUser);
+        when(SecurityContextHolder.getContext()).thenReturn(securityContext);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getPrincipal()).thenReturn(user);
 
-        Assertions.assertThrows(ProductInvalidException.class, () -> tested.update(idProduct, idUser, updateProductRequest));
+        doThrow(ProductInvalidException.class)
+                .when(searchProductFromUserService).byId(idProduct, user.getId());
 
-        Mockito.verify(searchProductFromUserService).byId(idProduct, idUser);
-        Mockito.verify(validateUniqueProductFromUserService, Mockito.never()).validate(updateProductRequest.getName(), idUser);
-        Mockito.verify(searchCategoryFromUserService, Mockito.never()).byId(idCategory, idUser);
-        Mockito.verify(productRepository, Mockito.never()).save(productCaptor.capture());
+        assertThrows(ProductInvalidException.class, () -> tested.update(idProduct, updateProductRequest));
+
+        verify(searchProductFromUserService).byId(idProduct, user.getId());
+        verify(validateUniqueProductFromUserService, never()).validate(updateProductRequest.getName(), user.getId());
+        verify(searchCategoryFromUserService, never()).byId(idCategory, user.getId());
+        verify(productRepository, never()).save(productCaptor.capture());
     }
 
     @Test
@@ -117,19 +151,24 @@ class UpdateProductServiceTest {
         Product product = ProductFactory.getProductWithCategory();
         Long idProduct = 1L;
         Long idCategory = 2L;
-        Long idUser = 3L;
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
+        User user = UserFactory.getUser();
 
-        Mockito.when(searchProductFromUserService.byId(idProduct, idUser)).thenReturn(product);
+        when(SecurityContextHolder.getContext()).thenReturn(securityContext);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getPrincipal()).thenReturn(user);
+        when(searchProductFromUserService.byId(idProduct, user.getId())).thenReturn(product);
 
-        Mockito.doThrow(ProductRegisteredException.class)
-                .when(validateUniqueProductFromUserService).validate(updateProductRequest.getName(), idUser);
+        doThrow(ProductRegisteredException.class)
+                .when(validateUniqueProductFromUserService).validate(updateProductRequest.getName(), user.getId());
 
-        Assertions.assertThrows(ProductRegisteredException.class, () -> tested.update(idProduct, idUser, updateProductRequest));
+        assertThrows(ProductRegisteredException.class, () -> tested.update(idProduct, updateProductRequest));
 
-        Mockito.verify(searchProductFromUserService).byId(idProduct, idUser);
-        Mockito.verify(validateUniqueProductFromUserService).validate(updateProductRequest.getName(), idUser);
-        Mockito.verify(searchCategoryFromUserService, Mockito.never()).byId(idCategory, idUser);
-        Mockito.verify(productRepository, Mockito.never()).save(productCaptor.capture());
+        verify(searchProductFromUserService).byId(idProduct, user.getId());
+        verify(validateUniqueProductFromUserService).validate(updateProductRequest.getName(), user.getId());
+        verify(searchCategoryFromUserService, never()).byId(idCategory, user.getId());
+        verify(productRepository, never()).save(productCaptor.capture());
     }
 
     @Test
@@ -138,19 +177,24 @@ class UpdateProductServiceTest {
         UpdateProductRequest updateProductRequest = ProductFactory.getUpdateProductRequestWithCategory();
         Product product = ProductFactory.getProductNotCategory();
         Long idProduct = 1L;
-        Long idUser = 3L;
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
+        User user = UserFactory.getUser();
 
-        Mockito.when(searchProductFromUserService.byId(idProduct, idUser)).thenReturn(product);
+        when(SecurityContextHolder.getContext()).thenReturn(securityContext);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getPrincipal()).thenReturn(user);
+        when(searchProductFromUserService.byId(idProduct, user.getId())).thenReturn(product);
 
-        Mockito.doThrow(CategoryInvalidException.class)
-                .when(searchCategoryFromUserService).byId(updateProductRequest.getCategoryId(), idUser);
+        doThrow(CategoryInvalidException.class)
+                .when(searchCategoryFromUserService).byId(updateProductRequest.getCategoryId(), user.getId());
 
-        Assertions.assertThrows(CategoryInvalidException.class, () -> tested.update(idProduct, idUser, updateProductRequest));
+        assertThrows(CategoryInvalidException.class, () -> tested.update(idProduct, updateProductRequest));
 
-        Mockito.verify(searchProductFromUserService).byId(idProduct, idUser);
-        Mockito.verify(validateUniqueProductFromUserService).validate(updateProductRequest.getName(), idUser);
-        Mockito.verify(searchCategoryFromUserService).byId(updateProductRequest.getCategoryId(), idUser);
-        Mockito.verify(productRepository, Mockito.never()).save(productCaptor.capture());
+        verify(searchProductFromUserService).byId(idProduct, user.getId());
+        verify(validateUniqueProductFromUserService).validate(updateProductRequest.getName(), user.getId());
+        verify(searchCategoryFromUserService).byId(updateProductRequest.getCategoryId(), user.getId());
+        verify(productRepository, never()).save(productCaptor.capture());
     }
 }
 

@@ -4,12 +4,15 @@ import br.com.vbruno.minhafeira.DTO.request.product.UpdateProductRequest;
 import br.com.vbruno.minhafeira.DTO.response.IdResponse;
 import br.com.vbruno.minhafeira.domain.Category;
 import br.com.vbruno.minhafeira.domain.Product;
+import br.com.vbruno.minhafeira.domain.User;
 import br.com.vbruno.minhafeira.mapper.IdResponseMapper;
 import br.com.vbruno.minhafeira.repository.ProductRepository;
 import br.com.vbruno.minhafeira.service.category.search.SearchCategoryFromUserService;
 import br.com.vbruno.minhafeira.service.product.search.SearchProductFromUserService;
 import br.com.vbruno.minhafeira.service.product.validate.ValidateUniqueProductFromUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,15 +34,18 @@ public class UpdateProductService {
     private ProductRepository productRepository;
 
     @Transactional
-    public IdResponse update(Long idProduct, Long idUser, UpdateProductRequest request) {
-        Product product = searchProductFromUserService.byId(idProduct, idUser);
+    public IdResponse update(Long idProduct, UpdateProductRequest request) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+
+        Product product = searchProductFromUserService.byId(idProduct, user.getId());
 
         if(!Objects.equals(request.getName(), product.getName())) {
-            validateUniqueProductFromUserService.validate(request.getName(), idUser);
+            validateUniqueProductFromUserService.validate(request.getName(), user.getId());
         }
 
         if(request.getCategoryId() != null) {
-            Category category = searchCategoryFromUserService.byId(request.getCategoryId(), idUser);
+            Category category = searchCategoryFromUserService.byId(request.getCategoryId(), user.getId());
             product.setCategory(category);
         } else {
             product.setCategory(null);

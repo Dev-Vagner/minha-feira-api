@@ -5,7 +5,6 @@ import br.com.vbruno.minhafeira.DTO.response.IdResponse;
 import br.com.vbruno.minhafeira.domain.User;
 import br.com.vbruno.minhafeira.mapper.IdResponseMapper;
 import br.com.vbruno.minhafeira.repository.UserRepository;
-import br.com.vbruno.minhafeira.service.user.search.SearchUserService;
 import br.com.vbruno.minhafeira.service.user.validate.ValidateUniqueEmailUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;

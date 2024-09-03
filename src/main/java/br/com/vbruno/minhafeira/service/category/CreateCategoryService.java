@@ -7,7 +7,6 @@ import br.com.vbruno.minhafeira.domain.User;
 import br.com.vbruno.minhafeira.mapper.IdResponseMapper;
 import br.com.vbruno.minhafeira.repository.CategoryRepository;
 import br.com.vbruno.minhafeira.service.category.validate.ValidateUniqueCategoryFromUserService;
-import br.com.vbruno.minhafeira.service.user.search.SearchUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

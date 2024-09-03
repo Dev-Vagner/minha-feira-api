@@ -35,36 +35,36 @@ public class ProductController {
     @Autowired
     private DeleteProductService deleteProductService;
 
-    @GetMapping("/user/{idUser}")
-    public List<ListProductResponse> list(@PathVariable Long idUser) {
-        return listProductService.list(idUser);
+    @GetMapping
+    public List<ListProductResponse> list() {
+        return listProductService.list();
     }
 
-    @GetMapping("category/{idCategory}/user/{idUser}")
-    public List<ListProductResponse> listByCategory(@PathVariable Long idCategory, @PathVariable Long idUser) {
-        return listProductByCategoryService.listByCategory(idCategory, idUser);
+    @GetMapping("category/{idCategory}")
+    public List<ListProductResponse> listByCategory(@PathVariable Long idCategory) {
+        return listProductByCategoryService.listByCategory(idCategory);
     }
 
-    @GetMapping("/{idProduct}/user/{idUser}")
-    public DetailsProductResponse details(@PathVariable Long idProduct, @PathVariable Long idUser) {
-        return detailsProductService.details(idProduct, idUser);
+    @GetMapping("/{idProduct}")
+    public DetailsProductResponse details(@PathVariable Long idProduct) {
+        return detailsProductService.details(idProduct);
     }
 
-    @PostMapping("/user/{idUser}")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public IdResponse register(@PathVariable Long idUser, @Valid @RequestBody CreateProductRequest request) {
-        return createProductService.register(idUser, request);
+    public IdResponse register(@Valid @RequestBody CreateProductRequest request) {
+        return createProductService.register(request);
     }
 
-    @PutMapping("/{idProduct}/user/{idUser}")
+    @PutMapping("/{idProduct}")
     @ResponseStatus(HttpStatus.OK)
-    public IdResponse update(@PathVariable Long idProduct, @PathVariable Long idUser, @Valid @RequestBody UpdateProductRequest request) {
-        return updateProductService.update(idProduct, idUser, request);
+    public IdResponse update(@PathVariable Long idProduct, @Valid @RequestBody UpdateProductRequest request) {
+        return updateProductService.update(idProduct, request);
     }
 
-    @DeleteMapping("/{idProduct}/user/{idUser}")
+    @DeleteMapping("/{idProduct}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Long idProduct, @PathVariable Long idUser) {
-        deleteProductService.delete(idProduct, idUser);
+    public void delete(@PathVariable Long idProduct) {
+        deleteProductService.delete(idProduct);
     }
 }
