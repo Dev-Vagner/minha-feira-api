@@ -35,7 +35,7 @@ public class UpdateCategoryService {
 
         Category category = searchCategoryFromUserService.byId(idCategory, user.getId());
 
-        if(!Objects.equals(request.getName(), category.getName())) {
+        if(!Objects.equals(request.getName().toUpperCase(), category.getName().toUpperCase())) {
             validateUniqueCategoryFromUserService.validate(request.getName(), user.getId());
         }
 
