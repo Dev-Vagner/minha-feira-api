@@ -2,14 +2,12 @@ package br.com.vbruno.minhafeira.controller;
 
 import br.com.vbruno.minhafeira.DTO.response.ErrorResponse;
 import br.com.vbruno.minhafeira.exception.*;
-import com.auth0.jwt.exceptions.JWTCreationException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -17,9 +15,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
-import org.springframework.web.servlet.resource.ResourceHttpRequestHandler;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -28,6 +24,21 @@ import static org.springframework.http.HttpStatus.*;
 
 @ControllerAdvice
 public class AdviceController {
+
+    @ExceptionHandler(PasswordInvalidException.class)
+    public ResponseEntity<ErrorResponse> handlePasswordInvalidException(PasswordInvalidException ex, HttpServletRequest request) {
+
+        HttpStatus status = UNPROCESSABLE_ENTITY;
+
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setTimeStamp(LocalDateTime.now());
+        errorResponse.setStatus(status.value());
+        errorResponse.setReasonPhrase(status.getReasonPhrase());
+        errorResponse.setMessage(ex.getMessage());
+        errorResponse.setPath(request.getServletPath());
+
+        return new ResponseEntity<>(errorResponse, status);
+    }
 
     @ExceptionHandler(RangeDateInvalidException.class)
     public ResponseEntity<ErrorResponse> handleRangeDateInvalidException(RangeDateInvalidException ex, HttpServletRequest request) {

@@ -31,10 +31,10 @@ class UpdateUserServiceTest {
     @Mock
     private UserRepository userRepository;
 
-    private MockedStatic<SecurityContextHolder> securityContextHolderMock;
-
     @Captor
     private ArgumentCaptor<User> userCaptor;
+
+    private MockedStatic<SecurityContextHolder> securityContextHolderMock;
 
     @BeforeEach
     void beforeTests() {
