@@ -15,15 +15,22 @@ import br.com.vbruno.minhafeira.repository.MarketRepository;
 import br.com.vbruno.minhafeira.repository.ProductQuantityRepository;
 import br.com.vbruno.minhafeira.service.market.validate.ValidateUniqueProductFromMarketService;
 import br.com.vbruno.minhafeira.service.product.search.SearchProductFromUserService;
-import br.com.vbruno.minhafeira.service.user.search.SearchUserService;
-import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class CreateMarketServiceTest {
@@ -33,9 +40,6 @@ class CreateMarketServiceTest {
 
     @Mock
     private ValidateUniqueProductFromMarketService validateUniqueProductFromMarketService;
-
-    @Mock
-    private SearchUserService searchUserService;
 
     @Mock
     private SearchProductFromUserService searchProductFromUserService;
@@ -52,6 +56,18 @@ class CreateMarketServiceTest {
     @Captor
     private ArgumentCaptor<Market> marketCaptor;
 
+    private MockedStatic<SecurityContextHolder> securityContextHolderMock;
+
+    @BeforeEach
+    void beforeTests() {
+        securityContextHolderMock = Mockito.mockStatic(SecurityContextHolder.class);
+    }
+
+    @AfterEach
+    void afterTests() {
+        securityContextHolderMock.close();
+    }
+
     @Test
     @DisplayName("Deve cadastrar uma nova feira com sucesso")
     void deveCadastrarNovaFeira() {
@@ -59,25 +75,27 @@ class CreateMarketServiceTest {
         Long idProductFromList = createMarketRequest.getListProductsQuantities().get(0).getProductId();
         List<Long> listIdProduct = List.of(idProductFromList);
         Product product = ProductFactory.getProductWithCategory();
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
         User user = UserFactory.getUser();
-        Long idUser = 1L;
 
-        Mockito.when(searchUserService.byId(idUser)).thenReturn(user);
-        Mockito.when(searchProductFromUserService.byId(idProductFromList, idUser)).thenReturn(product);
+        when(SecurityContextHolder.getContext()).thenReturn(securityContext);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getPrincipal()).thenReturn(user);
+        when(searchProductFromUserService.byId(idProductFromList, user.getId())).thenReturn(product);
 
-        IdResponse idResponse = tested.register(idUser, createMarketRequest);
+        IdResponse idResponse = tested.register(createMarketRequest);
 
-        Mockito.verify(searchUserService).byId(idUser);
-        Mockito.verify(validateUniqueProductFromMarketService).validate(listIdProduct);
-        Mockito.verify(marketRepository).save(marketCaptor.capture());
-        Mockito.verify(searchProductFromUserService).byId(idProductFromList, idUser);
-        Mockito.verify(productQuantityRepository).saveAll(listProductQuantityCaptor.capture());
+        verify(validateUniqueProductFromMarketService).validate(listIdProduct);
+        verify(marketRepository).save(marketCaptor.capture());
+        verify(searchProductFromUserService).byId(idProductFromList, user.getId());
+        verify(productQuantityRepository).saveAll(listProductQuantityCaptor.capture());
 
         Market marketSaved = marketCaptor.getValue();
         List<ProductQuantity> listProductQuantitySaved = listProductQuantityCaptor.getValue();
 
-        Assertions.assertEquals(marketSaved.getId(), idResponse.getId());
-        Assertions.assertEquals(marketSaved, listProductQuantitySaved.get(0).getMarket());
+        assertEquals(marketSaved.getId(), idResponse.getId());
+        assertEquals(marketSaved, listProductQuantitySaved.get(0).getMarket());
     }
 
     @Test
@@ -86,21 +104,23 @@ class CreateMarketServiceTest {
         CreateMarketRequest createMarketRequest = MarketFactory.getCreateMarketRequest();
         Long idProductFromList = createMarketRequest.getListProductsQuantities().get(0).getProductId();
         List<Long> listIdProduct = List.of(idProductFromList);
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
         User user = UserFactory.getUser();
-        Long idUser = 1L;
 
-        Mockito.when(searchUserService.byId(idUser)).thenReturn(user);
+        when(SecurityContextHolder.getContext()).thenReturn(securityContext);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getPrincipal()).thenReturn(user);
 
-        Mockito.doThrow(ProductNotUniqueMarketException.class)
+        doThrow(ProductNotUniqueMarketException.class)
                 .when(validateUniqueProductFromMarketService).validate(listIdProduct);
 
-        Assertions.assertThrows(ProductNotUniqueMarketException.class, () -> tested.register(idUser, createMarketRequest));
+        assertThrows(ProductNotUniqueMarketException.class, () -> tested.register(createMarketRequest));
 
-        Mockito.verify(searchUserService).byId(idUser);
-        Mockito.verify(validateUniqueProductFromMarketService).validate(listIdProduct);
-        Mockito.verify(marketRepository, Mockito.never()).save(marketCaptor.capture());
-        Mockito.verify(searchProductFromUserService, Mockito.never()).byId(idProductFromList, idUser);
-        Mockito.verify(productQuantityRepository, Mockito.never()).saveAll(listProductQuantityCaptor.capture());
+        verify(validateUniqueProductFromMarketService).validate(listIdProduct);
+        verify(marketRepository, never()).save(marketCaptor.capture());
+        verify(searchProductFromUserService, never()).byId(idProductFromList, user.getId());
+        verify(productQuantityRepository, never()).saveAll(listProductQuantityCaptor.capture());
     }
 
     @Test
@@ -109,20 +129,22 @@ class CreateMarketServiceTest {
         CreateMarketRequest createMarketRequest = MarketFactory.getCreateMarketRequest();
         Long idProductFromList = createMarketRequest.getListProductsQuantities().get(0).getProductId();
         List<Long> listIdProduct = List.of(idProductFromList);
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
         User user = UserFactory.getUser();
-        Long idUser = 1L;
 
-        Mockito.when(searchUserService.byId(idUser)).thenReturn(user);
+        when(SecurityContextHolder.getContext()).thenReturn(securityContext);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getPrincipal()).thenReturn(user);
 
-        Mockito.doThrow(ProductInvalidException.class)
-                .when(searchProductFromUserService).byId(idProductFromList, idUser);
+        doThrow(ProductInvalidException.class)
+                .when(searchProductFromUserService).byId(idProductFromList, user.getId());
 
-        Assertions.assertThrows(ProductInvalidException.class, () -> tested.register(idUser, createMarketRequest));
+        assertThrows(ProductInvalidException.class, () -> tested.register(createMarketRequest));
 
-        Mockito.verify(searchUserService).byId(idUser);
-        Mockito.verify(validateUniqueProductFromMarketService).validate(listIdProduct);
-        Mockito.verify(marketRepository).save(marketCaptor.capture());
-        Mockito.verify(searchProductFromUserService).byId(idProductFromList, idUser);
-        Mockito.verify(productQuantityRepository, Mockito.never()).saveAll(listProductQuantityCaptor.capture());
+        verify(validateUniqueProductFromMarketService).validate(listIdProduct);
+        verify(marketRepository).save(marketCaptor.capture());
+        verify(searchProductFromUserService).byId(idProductFromList, user.getId());
+        verify(productQuantityRepository, never()).saveAll(listProductQuantityCaptor.capture());
     }
 }

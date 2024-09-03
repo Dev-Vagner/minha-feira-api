@@ -58,7 +58,6 @@ class CreateProductServiceTest {
         securityContextHolderMock.close();
     }
 
-
     @Test
     @DisplayName("Deve cadastrar um novo produto com categoria com sucesso")
     void deveCadastrarNovoProdutoComCategoria() {

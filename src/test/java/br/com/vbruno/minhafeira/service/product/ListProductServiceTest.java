@@ -6,7 +6,6 @@ import br.com.vbruno.minhafeira.domain.User;
 import br.com.vbruno.minhafeira.factory.ProductFactory;
 import br.com.vbruno.minhafeira.factory.UserFactory;
 import br.com.vbruno.minhafeira.repository.ProductRepository;
-import br.com.vbruno.minhafeira.service.user.search.SearchUserService;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

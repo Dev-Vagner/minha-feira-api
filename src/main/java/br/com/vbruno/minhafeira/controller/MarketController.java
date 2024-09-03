@@ -37,38 +37,38 @@ public class MarketController {
     @Autowired
     private DeleteMarketService deleteMarketService;
 
-    @GetMapping("/user/{idUser}")
-    public Page<ListMarketResponse> list(@PathVariable Long idUser, Pageable pageable) {
-        return listMarketService.list(idUser, pageable);
+    @GetMapping
+    public Page<ListMarketResponse> list(Pageable pageable) {
+        return listMarketService.list(pageable);
     }
 
-    @GetMapping("/byRangeDate/user/{idUser}")
-    public Page<ListMarketResponse> listByRangeDate(@PathVariable Long idUser, Pageable pageable,
-                                                    @RequestParam(name = "startDate") LocalDate startDate,
-                                                    @RequestParam(name = "endDate") LocalDate endDate) {
-        return listMarketByRangeDateService.listByRangeDate(idUser, startDate, endDate, pageable);
+    @GetMapping("/byRangeDate")
+    public Page<ListMarketResponse> listByRangeDate(@RequestParam(name = "startDate") LocalDate startDate,
+                                                    @RequestParam(name = "endDate") LocalDate endDate,
+                                                    Pageable pageable) {
+        return listMarketByRangeDateService.listByRangeDate(startDate, endDate, pageable);
     }
 
-    @GetMapping("/{idMarket}/user/{idUser}")
-    public DetailsMarketResponse details(@PathVariable Long idMarket, @PathVariable Long idUser) {
-        return detailsMarketService.details(idMarket, idUser);
+    @GetMapping("/{idMarket}")
+    public DetailsMarketResponse details(@PathVariable Long idMarket) {
+        return detailsMarketService.details(idMarket);
     }
 
-    @PostMapping("/user/{idUser}")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public IdResponse register(@PathVariable Long idUser, @Valid @RequestBody CreateMarketRequest request) {
-        return createMarketService.register(idUser, request);
+    public IdResponse register(@Valid @RequestBody CreateMarketRequest request) {
+        return createMarketService.register(request);
     }
 
-    @PutMapping("/{idMarket}/user/{idUser}")
+    @PutMapping("/{idMarket}")
     @ResponseStatus(HttpStatus.OK)
-    public IdResponse update(@PathVariable Long idMarket, @PathVariable Long idUser, @Valid @RequestBody UpdateMarketRequest request) {
-        return updateMarketService.update(idMarket, idUser, request);
+    public IdResponse update(@PathVariable Long idMarket, @Valid @RequestBody UpdateMarketRequest request) {
+        return updateMarketService.update(idMarket, request);
     }
 
-    @DeleteMapping("/{idMarket}/user/{idUser}")
+    @DeleteMapping("/{idMarket}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Long idMarket, @PathVariable Long idUser) {
-        deleteMarketService.delete(idMarket, idUser);
+    public void delete(@PathVariable Long idMarket) {
+        deleteMarketService.delete(idMarket);
     }
 }

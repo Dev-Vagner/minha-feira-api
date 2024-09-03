@@ -4,11 +4,14 @@ import br.com.vbruno.minhafeira.DTO.response.market.DetailsMarketResponse;
 import br.com.vbruno.minhafeira.DTO.response.market.DetailsProductQuantityResponse;
 import br.com.vbruno.minhafeira.domain.Market;
 import br.com.vbruno.minhafeira.domain.ProductQuantity;
+import br.com.vbruno.minhafeira.domain.User;
 import br.com.vbruno.minhafeira.mapper.market.DetailsMarketMapper;
 import br.com.vbruno.minhafeira.mapper.market.DetailsProductQuantityMapper;
 import br.com.vbruno.minhafeira.repository.ProductQuantityRepository;
 import br.com.vbruno.minhafeira.service.market.search.SearchMarketFromUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -23,8 +26,11 @@ public class DetailsMarketService {
     @Autowired
     private ProductQuantityRepository productQuantityRepository;
 
-    public DetailsMarketResponse details(Long idMarket, Long idUser) {
-        Market market = searchMarketFromUserService.byId(idMarket, idUser);
+    public DetailsMarketResponse details(Long idMarket) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+
+        Market market = searchMarketFromUserService.byId(idMarket, user.getId());
         List<ProductQuantity> listProductsQuantities = productQuantityRepository.findAllByMarketId(idMarket);
 
         List<DetailsProductQuantityResponse> listDetailsProductQuantityResponse = getListDetailsProductQuantityResponse(listProductsQuantities);

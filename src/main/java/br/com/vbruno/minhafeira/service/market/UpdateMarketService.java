@@ -6,6 +6,7 @@ import br.com.vbruno.minhafeira.DTO.response.IdResponse;
 import br.com.vbruno.minhafeira.domain.Market;
 import br.com.vbruno.minhafeira.domain.Product;
 import br.com.vbruno.minhafeira.domain.ProductQuantity;
+import br.com.vbruno.minhafeira.domain.User;
 import br.com.vbruno.minhafeira.mapper.IdResponseMapper;
 import br.com.vbruno.minhafeira.repository.MarketRepository;
 import br.com.vbruno.minhafeira.repository.ProductQuantityRepository;
@@ -13,6 +14,8 @@ import br.com.vbruno.minhafeira.service.market.search.SearchMarketFromUserServic
 import br.com.vbruno.minhafeira.service.market.validate.ValidateUniqueProductFromMarketService;
 import br.com.vbruno.minhafeira.service.product.search.SearchProductFromUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,8 +40,11 @@ public class UpdateMarketService {
     private MarketRepository marketRepository;
 
     @Transactional
-    public IdResponse update(Long idMarket, Long idUser, UpdateMarketRequest request) {
-        Market market = searchMarketFromUserService.byId(idMarket, idUser);
+    public IdResponse update(Long idMarket, UpdateMarketRequest request) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+
+        Market market = searchMarketFromUserService.byId(idMarket, user.getId());
 
         List<Long> listIdsProducts = request.getListProductsQuantities().stream()
                 .map(UpdateProductQuantityRequest::getProductId).toList();
@@ -51,7 +57,7 @@ public class UpdateMarketService {
 
         marketRepository.save(market);
 
-        List<ProductQuantity> listProductsQuantitiesValidate = getListValidateProductsQuantities(request.getListProductsQuantities(), idUser, market);
+        List<ProductQuantity> listProductsQuantitiesValidate = getListValidateProductsQuantities(request.getListProductsQuantities(), user.getId(), market);
 
         productQuantityRepository.deleteAllByMarketId(market.getId());
 

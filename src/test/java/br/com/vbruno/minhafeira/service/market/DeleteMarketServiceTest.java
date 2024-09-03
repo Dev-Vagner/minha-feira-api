@@ -1,16 +1,23 @@
 package br.com.vbruno.minhafeira.service.market;
 
+import br.com.vbruno.minhafeira.domain.User;
 import br.com.vbruno.minhafeira.exception.MarketInvalidException;
+import br.com.vbruno.minhafeira.factory.UserFactory;
 import br.com.vbruno.minhafeira.repository.MarketRepository;
 import br.com.vbruno.minhafeira.service.market.search.SearchMarketFromUserService;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class DeleteMarketServiceTest {
@@ -24,15 +31,33 @@ class DeleteMarketServiceTest {
     @Mock
     private MarketRepository marketRepository;
 
+    private MockedStatic<SecurityContextHolder> securityContextHolderMock;
+
+    @BeforeEach
+    void beforeTests() {
+        securityContextHolderMock = Mockito.mockStatic(SecurityContextHolder.class);
+    }
+
+    @AfterEach
+    void afterTests() {
+        securityContextHolderMock.close();
+    }
+
     @Test
     @DisplayName("Deve deletar a feira com sucesso")
     void deveDeletarFeira() {
         Long idMarket = 1L;
-        Long idUser = 2L;
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
+        User user = UserFactory.getUser();
 
-        tested.delete(idMarket, idUser);
+        when(SecurityContextHolder.getContext()).thenReturn(securityContext);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getPrincipal()).thenReturn(user);
 
-        Mockito.verify(searchMarketFromUserService).byId(idMarket, idUser);
+        tested.delete(idMarket);
+
+        Mockito.verify(searchMarketFromUserService).byId(idMarket, user.getId());
         Mockito.verify(marketRepository).deleteById(idMarket);
     }
 
@@ -40,14 +65,20 @@ class DeleteMarketServiceTest {
     @DisplayName("Deve retornar erro quando tentar deletar a feira mas o ID da feira for inválido para aquele usuário")
     void deveRetornarErroQuandoIdFeiraInvalido() {
         Long idMarket = 1L;
-        Long idUser = 2L;
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
+        User user = UserFactory.getUser();
 
-        Mockito.doThrow(MarketInvalidException.class)
-                .when(searchMarketFromUserService).byId(idMarket, idUser);
+        when(SecurityContextHolder.getContext()).thenReturn(securityContext);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getPrincipal()).thenReturn(user);
 
-        Assertions.assertThrows(MarketInvalidException.class, () -> tested.delete(idMarket, idUser));
+        doThrow(MarketInvalidException.class)
+                .when(searchMarketFromUserService).byId(idMarket, user.getId());
 
-        Mockito.verify(searchMarketFromUserService).byId(idMarket, idUser);
-        Mockito.verify(marketRepository, Mockito.never()).deleteById(idMarket);
+        assertThrows(MarketInvalidException.class, () -> tested.delete(idMarket));
+
+        verify(searchMarketFromUserService).byId(idMarket, user.getId());
+        verify(marketRepository, never()).deleteById(idMarket);
     }
 }
