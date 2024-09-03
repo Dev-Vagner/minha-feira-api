@@ -28,7 +28,7 @@ public class UpdateUserService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
 
-        if(!Objects.equals(request.getEmail(), user.getEmail())) {
+        if(!Objects.equals(request.getEmail().toUpperCase(), user.getEmail().toUpperCase())) {
             validateUniqueEmailUserService.validate(request.getEmail());
         }
 
