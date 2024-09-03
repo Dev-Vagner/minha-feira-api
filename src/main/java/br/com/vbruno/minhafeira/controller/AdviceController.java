@@ -6,8 +6,10 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -15,6 +17,9 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.NoHandlerFoundException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
+import org.springframework.web.servlet.resource.ResourceHttpRequestHandler;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -174,21 +179,6 @@ public class AdviceController {
         return new ResponseEntity<>(errorResponse, status);
     }
 
-    @ExceptionHandler(JWTCreationException.class)
-    public ResponseEntity<ErrorResponse> handleJWTCreationException(JWTCreationException ex, HttpServletRequest request) {
-
-        HttpStatus status = INTERNAL_SERVER_ERROR;
-
-        ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setTimeStamp(LocalDateTime.now());
-        errorResponse.setStatus(status.value());
-        errorResponse.setReasonPhrase(status.getReasonPhrase());
-        errorResponse.setMessage("Ocorreu um erro interno ao tentar gerar o token de autenticação");
-        errorResponse.setPath(request.getServletPath());
-
-        return new ResponseEntity<>(errorResponse, status);
-    }
-
     @ExceptionHandler(UsernameNotFoundException.class)
     @ResponseStatus(UNAUTHORIZED)
     public void handleUsernameNotFoundException(UsernameNotFoundException ex, HttpServletRequest request) {
@@ -197,6 +187,36 @@ public class AdviceController {
     @ExceptionHandler(BadCredentialsException.class)
     @ResponseStatus(UNAUTHORIZED)
     public void handleBadCredentialsException(BadCredentialsException ex, HttpServletRequest request) {
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNoResourceFoundException(NoResourceFoundException ex, HttpServletRequest request) {
+
+        HttpStatus status = NOT_FOUND;
+
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setTimeStamp(LocalDateTime.now());
+        errorResponse.setStatus(status.value());
+        errorResponse.setReasonPhrase(status.getReasonPhrase());
+        errorResponse.setMessage("Rota não encontrada");
+        errorResponse.setPath(request.getServletPath());
+
+        return new ResponseEntity<>(errorResponse, status);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex, HttpServletRequest request) {
+
+        HttpStatus status = BAD_REQUEST;
+
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setTimeStamp(LocalDateTime.now());
+        errorResponse.setStatus(status.value());
+        errorResponse.setReasonPhrase(status.getReasonPhrase());
+        errorResponse.setMessage("JSON mal formatado");
+        errorResponse.setPath(request.getServletPath());
+
+        return new ResponseEntity<>(errorResponse, status);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

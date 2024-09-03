@@ -39,8 +39,8 @@ public class UpdateProductService {
         User user = (User) authentication.getPrincipal();
 
         Product product = searchProductFromUserService.byId(idProduct, user.getId());
-
-        if(!Objects.equals(request.getName(), product.getName())) {
+        
+        if(!Objects.equals(request.getName().toUpperCase(), product.getName().toUpperCase())) {
             validateUniqueProductFromUserService.validate(request.getName(), user.getId());
         }
 
