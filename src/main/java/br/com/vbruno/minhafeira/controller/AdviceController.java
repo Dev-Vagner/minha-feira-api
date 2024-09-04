@@ -148,7 +148,7 @@ public class AdviceController {
     @ExceptionHandler(UserNotRegisteredException.class)
     public ResponseEntity<ErrorResponse> handleUserNotRegisteredException(UserNotRegisteredException ex, HttpServletRequest request) {
 
-        HttpStatus status = UNPROCESSABLE_ENTITY;
+        HttpStatus status = NOT_FOUND;
 
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setTimeStamp(LocalDateTime.now());
@@ -164,6 +164,21 @@ public class AdviceController {
     public ResponseEntity<ErrorResponse> handleEmailRegisteredException(EmailRegisteredException ex, HttpServletRequest request) {
 
         HttpStatus status = UNPROCESSABLE_ENTITY;
+
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setTimeStamp(LocalDateTime.now());
+        errorResponse.setStatus(status.value());
+        errorResponse.setReasonPhrase(status.getReasonPhrase());
+        errorResponse.setMessage(ex.getMessage());
+        errorResponse.setPath(request.getServletPath());
+
+        return new ResponseEntity<>(errorResponse, status);
+    }
+
+    @ExceptionHandler(EmailNotSentException.class)
+    public ResponseEntity<ErrorResponse> handleEmailNotSentException(EmailNotSentException ex, HttpServletRequest request) {
+
+        HttpStatus status = INTERNAL_SERVER_ERROR;
 
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setTimeStamp(LocalDateTime.now());
