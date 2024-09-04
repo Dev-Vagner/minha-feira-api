@@ -1,5 +1,6 @@
 package br.com.vbruno.minhafeira.service.email;
 
+import br.com.vbruno.minhafeira.exception.EmailNotSentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -15,7 +16,7 @@ public class EmailService {
     @Value("${spring.mail.username}")
     private String sender;
 
-    public boolean sendEmail(String receiver, String subject, String message) {
+    public void sendEmail(String receiver, String subject, String message) {
         try {
             SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
             simpleMailMessage.setFrom(sender);
@@ -23,9 +24,8 @@ public class EmailService {
             simpleMailMessage.setSubject(subject);
             simpleMailMessage.setText(message);
             javaMailSender.send(simpleMailMessage);
-            return true;
         } catch (Exception ex) {
-            return false;
+            throw new EmailNotSentException("Ocorreu um problema interno ao tentar enviar o email");
         }
     }
 }

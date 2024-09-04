@@ -17,4 +17,12 @@ public class SearchUserService {
                 .orElseThrow(() -> new UserNotRegisteredException("Usuário não encontrado"));
     }
 
+    public User byEmail(String email) {
+        User user = (User) userRepository.findByEmail(email);
+
+        if(user == null) throw new UserNotRegisteredException("Email não cadastrado");
+
+        return user;
+    }
+
 }

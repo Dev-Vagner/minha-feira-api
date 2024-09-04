@@ -5,12 +5,11 @@ import br.com.vbruno.minhafeira.DTO.request.user.RecoveryPasswordRequest;
 import br.com.vbruno.minhafeira.DTO.response.MessageResponse;
 import br.com.vbruno.minhafeira.domain.User;
 import br.com.vbruno.minhafeira.domain.VerificationTokenPassword;
-import br.com.vbruno.minhafeira.exception.EmailNotSentException;
-import br.com.vbruno.minhafeira.exception.UserNotRegisteredException;
 import br.com.vbruno.minhafeira.repository.UserRepository;
 import br.com.vbruno.minhafeira.repository.VerificationTokenPasswordRepository;
 import br.com.vbruno.minhafeira.service.email.EmailService;
 import br.com.vbruno.minhafeira.service.user.search.SearchTokenRecoveryPasswordService;
+import br.com.vbruno.minhafeira.service.user.search.SearchUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -32,12 +31,14 @@ public class RecoveryUserPasswordService {
     private SearchTokenRecoveryPasswordService searchTokenRecoveryPasswordService;
 
     @Autowired
+    private SearchUserService searchUserService;
+
+    @Autowired
     private UserRepository userRepository;
 
     @Transactional
     public MessageResponse sendEmail(EmailRecoveryPasswordRequest request) {
-        User user = (User) userRepository.findByEmail(request.getEmail());
-        if(user == null) throw new UserNotRegisteredException("Email não cadastrado");
+        User user = searchUserService.byEmail(request.getEmail());
 
         UUID token = UUID.randomUUID();
         LocalDateTime dataExpiracao = LocalDateTime.now().plusMinutes(15);
@@ -54,8 +55,7 @@ public class RecoveryUserPasswordService {
         String messageEmail = "Para você recuperar sua senha, utilize o token: " + token +
                 " em até 15 minutos. Caso você gere um novo token, o token enviado neste email se tornará inválido!";
 
-        boolean emailSent = emailService.sendEmail(request.getEmail(), subjectEmail, messageEmail);
-        if(!emailSent) throw new EmailNotSentException("Ocorreu um problema interno ao tentar enviar o email de recuperação de senha");
+        emailService.sendEmail(request.getEmail(), subjectEmail, messageEmail);
 
         return new MessageResponse("O email, com o token de recuperação de senha, foi enviado com sucesso!");
     }
