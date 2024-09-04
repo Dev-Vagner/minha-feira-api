@@ -1,9 +1,6 @@
 package br.com.vbruno.minhafeira.controller;
 
-import br.com.vbruno.minhafeira.DTO.request.user.CreateUserRequest;
-import br.com.vbruno.minhafeira.DTO.request.user.EmailRecoveryPasswordRequest;
-import br.com.vbruno.minhafeira.DTO.request.user.UpdateUserPasswordRequest;
-import br.com.vbruno.minhafeira.DTO.request.user.UpdateUserRequest;
+import br.com.vbruno.minhafeira.DTO.request.user.*;
 import br.com.vbruno.minhafeira.DTO.response.MessageResponse;
 import br.com.vbruno.minhafeira.DTO.response.user.DetailsUserResponse;
 import br.com.vbruno.minhafeira.DTO.response.IdResponse;
@@ -62,6 +59,12 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public MessageResponse emailRecoveryPassword(@Valid @RequestBody EmailRecoveryPasswordRequest request) {
         return recoveryUserPasswordService.sendEmail(request);
+    }
+
+    @PutMapping("/recovery-password")
+    @ResponseStatus(HttpStatus.OK)
+    public MessageResponse recoveryPassword(@Valid @RequestBody RecoveryPasswordRequest request) {
+        return recoveryUserPasswordService.recoveryPassword(request);
     }
 
     @DeleteMapping()

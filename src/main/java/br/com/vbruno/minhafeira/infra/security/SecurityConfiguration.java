@@ -35,6 +35,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/users").permitAll()
                         .requestMatchers(HttpMethod.POST, "/users/email-recovery-password").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/users/recovery-password").permitAll()
                         .requestMatchers(HttpMethod.POST, "/login").permitAll()
                         .anyRequest().authenticated()
                 )

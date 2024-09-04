@@ -1,4 +1,5 @@
 DROP TABLE IF EXISTS tb_user CASCADE;
+DROP TABLE IF EXISTS tb_verification_token CASCADE;
 DROP TABLE IF EXISTS tb_category CASCADE;
 DROP TABLE IF EXISTS tb_product CASCADE;
 DROP TABLE IF EXISTS tb_market CASCADE;
@@ -13,6 +14,15 @@ CREATE TABLE tb_user(
 	CONSTRAINT pk_user_id PRIMARY KEY (id),
 	CONSTRAINT ck_tb_user_role CHECK (role IN ('USER')),
 	CONSTRAINT uk_user_email UNIQUE (email)
+);
+
+CREATE TABLE tb_verification_token (
+	id BIGINT GENERATED ALWAYS AS IDENTITY NOT NULL,
+	token UUID NOT NULL,
+	data_expiracao TIMESTAMP NOT NULL,
+	user_id BIGINT NOT NULL,
+	CONSTRAINT pk_verification_token_id PRIMARY KEY (id),
+	CONSTRAINT fk_verification_token_user FOREIGN KEY (user_id) REFERENCES tb_user ON DELETE CASCADE
 );
 
 CREATE TABLE tb_category(

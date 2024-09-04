@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 public class EmailRecoveryPasswordRequest {
 
-    @NotBlank(message = "O email do usuário não pode estar em branco")
-    @Email(message = "O email do usuário deve ter um formato válido")
+    @NotBlank(message = "O email não pode estar em branco")
+    @Email(message = "O email deve ter um formato válido")
     private String email;
 }
