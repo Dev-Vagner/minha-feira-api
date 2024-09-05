@@ -52,6 +52,8 @@ class SearchTokenRecoveryPasswordServiceTest {
         TokenInvalidException exception =
                 assertThrows(TokenInvalidException.class, () -> tested.byToken(tokenInvalid));
 
+        assertThrows(TokenInvalidException.class, () -> tested.byToken(tokenInvalid));
+
         verify(verificationTokenPasswordRepository, never()).findByToken(tokenValidUUID);
 
         assertEquals("Token inválido", exception.getMessage());
