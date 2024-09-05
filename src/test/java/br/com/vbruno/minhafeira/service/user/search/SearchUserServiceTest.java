@@ -53,4 +53,43 @@ class SearchUserServiceTest {
 
         assertEquals("Usuário não encontrado", exception.getMessage());
     }
+
+    @Test
+    @DisplayName("Deve retornar usuário quando o email enviado for válido")
+    void deveRetornarUsuarioQuandoEmailValido() {
+        String emailTest = "emailtest@gmail.com";
+        User user = UserFactory.getUser();
+
+        when(userRepository.findByEmail(emailTest)).thenReturn(user);
+
+        User userReturned = tested.byEmail(emailTest);
+
+        verify(userRepository).findByEmail(emailTest);
+
+        assertEquals(user, userReturned);
+    }
+
+    @Test
+    @DisplayName("Deve retornar erro quando o email enviado for inválido")
+    void deveRetornarErroQuandoEmailInvalido() {
+        String emailTest = "emailinvalidotest@gmail.com";
+
+        when(userRepository.findByEmail(emailTest)).thenReturn(null);
+
+        UserNotRegisteredException exception =
+                assertThrows(UserNotRegisteredException.class, () -> tested.byEmail(emailTest));
+
+        verify(userRepository).findByEmail(emailTest);
+
+        assertEquals("Email não cadastrado", exception.getMessage());
+    }
+
+
+
+
+
+
+
+
+
 }
