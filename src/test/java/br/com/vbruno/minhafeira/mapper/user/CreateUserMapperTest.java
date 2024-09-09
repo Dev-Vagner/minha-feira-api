@@ -2,7 +2,7 @@ package br.com.vbruno.minhafeira.mapper.user;
 
 import br.com.vbruno.minhafeira.DTO.request.user.CreateUserRequest;
 import br.com.vbruno.minhafeira.domain.User;
-import br.com.vbruno.minhafeira.domain.UserRole;
+import br.com.vbruno.minhafeira.domain.enumeration.UserRole;
 import br.com.vbruno.minhafeira.factory.UserFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

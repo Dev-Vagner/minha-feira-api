@@ -20,7 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/products")
-@Tag(name = "Produto", description = "Endpoints relacionados a entidade Produto")
+@Tag(name = "Produto")
 @SecurityRequirement(name = SecurityConfiguration.SECURITY)
 public class ProductController {
 

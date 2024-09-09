@@ -22,7 +22,7 @@ import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/markets")
-@Tag(name = "Feira", description = "Endpoints relacionados a entidade Feira")
+@Tag(name = "Feira")
 @SecurityRequirement(name = SecurityConfiguration.SECURITY)
 public class MarketController {
 

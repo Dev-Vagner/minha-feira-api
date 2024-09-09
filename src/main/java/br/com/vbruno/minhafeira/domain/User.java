@@ -1,5 +1,6 @@
 package br.com.vbruno.minhafeira.domain;
 
+import br.com.vbruno.minhafeira.domain.enumeration.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;

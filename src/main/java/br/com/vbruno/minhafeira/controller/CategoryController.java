@@ -20,7 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/categories")
-@Tag(name = "Categoria dos produtos", description = "Endpoints relacionados a entidade Categoria")
+@Tag(name = "Categoria dos produtos")
 @SecurityRequirement(name = SecurityConfiguration.SECURITY)
 public class CategoryController {
 
