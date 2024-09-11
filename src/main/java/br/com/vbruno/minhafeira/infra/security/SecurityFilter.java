@@ -1,7 +1,6 @@
 package br.com.vbruno.minhafeira.infra.security;
 
 import br.com.vbruno.minhafeira.domain.User;
-import br.com.vbruno.minhafeira.exception.MarketInvalidException;
 import br.com.vbruno.minhafeira.exception.UserNotRegisteredException;
 import br.com.vbruno.minhafeira.repository.UserRepository;
 import jakarta.servlet.FilterChain;
@@ -11,7 +10,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
