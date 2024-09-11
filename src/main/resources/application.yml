@@ -6,6 +6,9 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
+  sql:
+    init:
+      data-locations: classpath:schema.sql
   mail:
     host: smtp.gmail.com
     port: 587

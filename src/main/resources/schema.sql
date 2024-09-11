@@ -1,11 +1,4 @@
-DROP TABLE IF EXISTS tb_user CASCADE;
-DROP TABLE IF EXISTS tb_verification_token CASCADE;
-DROP TABLE IF EXISTS tb_category CASCADE;
-DROP TABLE IF EXISTS tb_product CASCADE;
-DROP TABLE IF EXISTS tb_market CASCADE;
-DROP TABLE IF EXISTS tb_product_quantity CASCADE;
-
-CREATE TABLE tb_user(
+CREATE TABLE IF NOT EXISTS tb_user(
 	id BIGINT GENERATED ALWAYS AS IDENTITY NOT NULL,
 	name VARCHAR(50) NOT NULL,
 	email VARCHAR(50) NOT NULL,
@@ -16,7 +9,7 @@ CREATE TABLE tb_user(
 	CONSTRAINT uk_user_email UNIQUE (email)
 );
 
-CREATE TABLE tb_verification_token (
+CREATE TABLE IF NOT EXISTS tb_verification_token (
 	id BIGINT GENERATED ALWAYS AS IDENTITY NOT NULL,
 	token UUID NOT NULL,
 	data_expiracao TIMESTAMP NOT NULL,
@@ -25,7 +18,7 @@ CREATE TABLE tb_verification_token (
 	CONSTRAINT fk_verification_token_user FOREIGN KEY (user_id) REFERENCES tb_user ON DELETE CASCADE
 );
 
-CREATE TABLE tb_category(
+CREATE TABLE IF NOT EXISTS tb_category(
 	id BIGINT GENERATED ALWAYS AS IDENTITY NOT NULL,
 	name VARCHAR(50) NOT NULL,
 	user_id BIGINT NOT NULL,
@@ -34,7 +27,7 @@ CREATE TABLE tb_category(
 	CONSTRAINT fk_category_user FOREIGN KEY (user_id) REFERENCES tb_user ON DELETE CASCADE
 );
 
-CREATE TABLE tb_product(
+CREATE TABLE IF NOT EXISTS tb_product(
 	id BIGINT GENERATED ALWAYS AS IDENTITY NOT NULL,
 	name VARCHAR(50) NOT NULL,
 	category_id BIGINT,
@@ -45,7 +38,7 @@ CREATE TABLE tb_product(
 	CONSTRAINT fk_product_user FOREIGN KEY (user_id) REFERENCES tb_user ON DELETE CASCADE
 );
 
-CREATE TABLE tb_market(
+CREATE TABLE IF NOT EXISTS tb_market(
 	id BIGINT GENERATED ALWAYS AS IDENTITY NOT NULL,
 	date_market DATE NOT NULL,
 	total_value NUMERIC(12, 2),
@@ -55,7 +48,7 @@ CREATE TABLE tb_market(
 	CONSTRAINT fk_market_user FOREIGN KEY (user_id) REFERENCES tb_user ON DELETE CASCADE
 );
 
-CREATE TABLE tb_product_quantity (
+CREATE TABLE IF NOT EXISTS tb_product_quantity (
 	id BIGINT GENERATED ALWAYS AS IDENTITY NOT NULL,
 	product_id BIGINT NOT NULL,
 	quantity INT NOT NULL,
