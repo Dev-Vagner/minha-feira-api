@@ -16,8 +16,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UpdateUserPasswordService {
 
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+//    @Autowired
+//    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    UpdateUserPasswordService(BCryptPasswordEncoder bCryptPasswordEncoder) {
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    }
 
     @Autowired
     private UserRepository userRepository;
@@ -26,6 +32,7 @@ public class UpdateUserPasswordService {
     public IdResponse updatePassword(UpdateUserPasswordRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
+
 
         boolean isValid = bCryptPasswordEncoder.matches(request.getCurrentPassword(), user.getPassword());
         if(!isValid) throw new PasswordInvalidException("A senha enviada não é igual a senha cadastrada");
