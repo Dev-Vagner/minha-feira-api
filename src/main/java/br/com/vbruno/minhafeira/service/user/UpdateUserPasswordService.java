@@ -16,14 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UpdateUserPasswordService {
 
-//    @Autowired
-//    private BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    UpdateUserPasswordService(BCryptPasswordEncoder bCryptPasswordEncoder) {
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-    }
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
     private UserRepository userRepository;
