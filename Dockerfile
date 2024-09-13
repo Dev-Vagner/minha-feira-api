@@ -8,5 +8,4 @@ FROM openjdk:17-jdk-slim
 COPY --from=build /app/target/minhafeira-0.0.1-SNAPSHOT.jar /app/app.jar
 WORKDIR /app
 EXPOSE 8080
-ENV SPRING_PROFILES_ACTIVE=prod
 CMD ["java", "-jar", "app.jar"]
