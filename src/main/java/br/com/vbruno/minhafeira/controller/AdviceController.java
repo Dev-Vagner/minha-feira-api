@@ -3,6 +3,7 @@ package br.com.vbruno.minhafeira.controller;
 import br.com.vbruno.minhafeira.DTO.response.ErrorResponse;
 import br.com.vbruno.minhafeira.exception.*;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -204,6 +205,21 @@ public class AdviceController {
         return new ResponseEntity<>(errorResponse, status);
     }
 
+    @ExceptionHandler(PropertyReferenceException.class)
+    public ResponseEntity<ErrorResponse> handlePropertyReferenceException(PropertyReferenceException ex, HttpServletRequest request) {
+
+        HttpStatus status = BAD_REQUEST;
+
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setTimeStamp(LocalDateTime.now());
+        errorResponse.setStatus(status.value());
+        errorResponse.setReasonPhrase(status.getReasonPhrase());
+        errorResponse.setMessage("A propriedade " + ex.getPropertyName() + " é inválida");
+        errorResponse.setPath(request.getServletPath());
+
+        return new ResponseEntity<>(errorResponse, status);
+    }
+
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public ResponseEntity<ErrorResponse> handleMissingServletRequestParameterException(MissingServletRequestParameterException ex, HttpServletRequest request) {
 
@@ -213,7 +229,7 @@ public class AdviceController {
         errorResponse.setTimeStamp(LocalDateTime.now());
         errorResponse.setStatus(status.value());
         errorResponse.setReasonPhrase(status.getReasonPhrase());
-        errorResponse.setMessage("Parâmetros inválidos");
+        errorResponse.setMessage("O parâmetro " + ex.getParameterName() + " não foi definido");
         errorResponse.setPath(request.getServletPath());
 
         return new ResponseEntity<>(errorResponse, status);
@@ -296,7 +312,7 @@ public class AdviceController {
         errorResponse.setTimeStamp(LocalDateTime.now());
         errorResponse.setStatus(status.value());
         errorResponse.setReasonPhrase(status.getReasonPhrase());
-        errorResponse.setMessage("Ocorreu algum problema interno no servidor");
+        errorResponse.setMessage(ex.getClass().getName()); // "Ocorreu algum problema interno no servidor"
         errorResponse.setPath(request.getServletPath());
 
         return new ResponseEntity<>(errorResponse, status);
