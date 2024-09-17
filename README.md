@@ -8,7 +8,7 @@ Quem nunca passou pelos problemas de:
   - Preciso fazer a feira mas quais são os itens que estão faltando exatamente?
   - Preciso criar a lista da feira com os produtos e as quantidades para não esquecer de comprar nada no mercado.
   - Quanto foi o meu gasto com as feiras neste mês? Ou no mês passado?
-  - Quanto paguei em produto X na feira que realizei a 3 meses atrás? E quanto este produto está custando agora?
+  - Quanto paguei no produto X na feira que realizei a 3 meses atrás? E quanto este produto está custando agora?
 
 Então, buscando auxiliar na solução destes problemas que esta API foi desenvolvida.
 
