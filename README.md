@@ -70,6 +70,9 @@ Então, buscando auxiliar na solução destes problemas que esta API foi desenvo
 6. Ao finalizar a feira, caso o usuário queira ter um maior controle financeiro, poderá atualizar os dados da feira, adicionando os valores unitários
 dos produtos e/ou o valor total da feira: `PUT /markets/{idMarket}`
 
+## Diagrama de Entidade e Relacionamento
+![Captura de Tela (190)](https://github.com/user-attachments/assets/63ca459c-10ec-47b2-bc3b-fb53e9e0efef)
+
 ## Configuração e Execução
   - ### Dependências:
     - Docker
