@@ -1,4 +1,4 @@
-# API para a Organização de Feiras
+# API Rest para a Organização de Feiras
 Este repositório contém os componentes da API de organização de feiras, projetada para permitir que os usuários tenham um melhor controle das suas 
 feiras. A API fornece funcionalidades para cadastro de usuários, onde cada usuário poderá cadastrar seus próprios produtos, as categorias destes 
 produtos e as suas feiras.
@@ -8,7 +8,7 @@ Quem nunca passou pelos problemas de:
   - Preciso fazer a feira mas quais são os itens que estão faltando exatamente?
   - Preciso criar a lista da feira com os produtos e as quantidades para não esquecer de comprar nada no mercado.
   - Quanto foi o meu gasto com as feiras neste mês? Ou no mês passado?
-  - Quanto paguei em produto X na feira que realizei a 3 meses atrás? E quanto este produto está custando agora?
+  - Quanto paguei no produto X na feira que realizei a 3 meses atrás? E quanto este produto está custando agora?
 
 Então, buscando auxiliar na solução destes problemas que esta API foi desenvolvida.
 
@@ -69,6 +69,9 @@ Então, buscando auxiliar na solução destes problemas que esta API foi desenvo
 5. Cadastre uma nova feira, setando os produtos e quantidades e, caso queira, alguma observação sobre a feira: `POST /markets` 
 6. Ao finalizar a feira, caso o usuário queira ter um maior controle financeiro, poderá atualizar os dados da feira, adicionando os valores unitários
 dos produtos e/ou o valor total da feira: `PUT /markets/{idMarket}`
+
+## Diagrama de Entidade e Relacionamento
+![Captura de Tela (190)](https://github.com/user-attachments/assets/63ca459c-10ec-47b2-bc3b-fb53e9e0efef)
 
 ## Configuração e Execução
   - ### Dependências:
