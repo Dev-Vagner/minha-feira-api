@@ -31,7 +31,7 @@ services:
 
   api:
     build: .
-    container_name: mf_api
+    container_name: api
     environment:
       - DB_URL=jdbc:postgresql://db:5432/${DB_NAME}
       - DB_USERNAME=${DB_USER}
