@@ -10,7 +10,12 @@ Quem nunca passou pelos problemas de:
   - Quanto foi o meu gasto com as feiras neste mês? Ou no mês passado?
   - Quanto paguei no produto X na feira que realizei a 3 meses atrás? E quanto este produto está custando agora?
 
-Então, buscando auxiliar na solução destes problemas que esta API foi desenvolvida.
+Então, buscando auxiliar na solução destes problemas que esta API foi desenvolvida. 
+
+Ao desenvolver a aplicação, também busquei aplicar os princípios do Clean Code, utilizando nomenclaturas claras e significativas,
+funções curtas e com propósito único, procurando sempre a reutilização de código e  também mantendo uma boa cobertura de testes.
+Além disso, implementei o princípio do "Early Return", evitando aninhamentos desncessários, tornando o código mais legivel e de
+fácil manutenção.
 
 ## Ferramentas utilizadas
   - **Java 17 / Spring Boot**: Para o desenvolvimento da API Rest;
@@ -75,7 +80,7 @@ dos produtos e/ou o valor total da feira: `PUT /markets/{idMarket}`
 
 ## Configuração e Execução
   - ### Dependências:
-    - Docker
+    - Docker / Docker Compose
   - ### Passo-a-passo:
     1. Clone o repositório:
         ```bash
