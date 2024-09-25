@@ -25,7 +25,7 @@ fácil manutenção.
   - **Spring Security / JWT**: Para realizar a autenticação dos usuários;
   - **Java Mail Sender**: Para o envio de email;
   - **JUnit5 / Mockito**: Para a criação dos testes unitários;
-  - **Docker**: Para containerização e gerenciamento de ambientes;
+  - **Docker / Docker Compose**: Para containerização e gerenciamento de ambientes;
   - **Swagger**: Para a documentação da API;
   - **Kanban (Trello)**: Para a organização das tarefas a serem realizadas.
 
