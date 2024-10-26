@@ -1,4 +1,4 @@
-# API Rest para o gerenciamento de Feiras
+# API Rest para o Gerenciamento de Feiras
 Este repositório contém os componentes da API de gerenciamento de feiras, projetada para permitir que os usuários tenham um melhor controle das suas 
 feiras. A API fornece funcionalidades para cadastro de usuários, onde cada usuário poderá cadastrar seus próprios produtos, as categorias destes 
 produtos e as suas feiras.
